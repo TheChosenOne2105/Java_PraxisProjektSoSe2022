@@ -25,7 +25,8 @@ public class Clienthandler extends Thread{
         outputStream.write("Connected to Server!\n\r".getBytes());
         outputStream.write("Please type in your commands/messages: \n\r".getBytes());
         String Userinput;
-        while ((Userinput = bufferedReader.readLine()) != null){
+        Userinput = bufferedReader.readLine();
+        while (true){
             String msg =Userinput ;
             String output = "You Typed: " + msg + "\n\r";
             outputStream.write(output.getBytes());

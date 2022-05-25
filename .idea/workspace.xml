@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="178099ab-1da0-41c0-a358-3844ec8ce151" name="Changes" comment="Erster Entwurf eines Serversockets mit möglicher Kommunikation" />
+    <list default="true" id="178099ab-1da0-41c0-a358-3844ec8ce151" name="Changes" comment="Verbesserung Serversocket">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ChatApplikation/Clienthandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ChatApplikation/Clienthandler.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ChatApplikation/Server.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ChatApplikation/Server.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Clienthandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Clienthandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -83,7 +90,14 @@
       <option name="project" value="LOCAL" />
       <updated>1653483001220</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Verbesserung Serversocket">
+      <created>1653485572040</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1653485572040</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -101,6 +115,7 @@
     <MESSAGE value="Erstellung der Arbeitsdateien" />
     <MESSAGE value="Kleine Änderungen für Datenordnung" />
     <MESSAGE value="Erster Entwurf eines Serversockets mit möglicher Kommunikation" />
-    <option name="LAST_COMMIT_MESSAGE" value="Erster Entwurf eines Serversockets mit möglicher Kommunikation" />
+    <MESSAGE value="Verbesserung Serversocket" />
+    <option name="LAST_COMMIT_MESSAGE" value="Verbesserung Serversocket" />
   </component>
 </project>

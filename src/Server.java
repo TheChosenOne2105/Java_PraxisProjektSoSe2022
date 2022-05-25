@@ -2,15 +2,18 @@ import java.io.*;
 import java.net.*;
 
 public class Server{
+    int port;
+
+public Server(int port){
+    this.port = port;
+}
 
 
-    int port = 1833;
 
 
 
 
-
-    public void serverstart() {
+    public void start() {
         try {
             System.out.println("Server is starting... ");
             ServerSocket serversocket = new ServerSocket(port);
