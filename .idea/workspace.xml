@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="178099ab-1da0-41c0-a358-3844ec8ce151" name="Changes" comment="Version 0.4 des Servers. [Bugfixing]">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/ChatApplikation/Clienthandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ChatApplikation/Clienthandler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Clienthandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Clienthandler.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -108,7 +106,14 @@
       <option name="project" value="LOCAL" />
       <updated>1653565810760</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Version 0.4 des Servers. [Bugfixing]">
+      <created>1653567269142</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1653567269142</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

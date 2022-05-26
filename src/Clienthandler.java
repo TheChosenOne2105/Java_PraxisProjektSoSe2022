@@ -58,7 +58,7 @@ public class Clienthandler extends Thread{
 
 
     public void sendingMessages(String Message){
-        String formatedMessage = clientUsername+ ": " + Message + "\n \r";
+        String formatedMessage = clientUsername+ ": " + Message;
     for (Clienthandler clienthandler : clienthandlers){
         try{
             if (!clienthandler.clientUsername.equals(clientUsername) && !Message.contains("/")) {
