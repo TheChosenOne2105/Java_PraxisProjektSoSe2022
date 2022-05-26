@@ -1,6 +1,7 @@
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
+import java.util.stream.*;
 
 public class Clienthandler extends Thread{
     //Inspiration durch dieses YouTube Video von Jim Liao : https://www.youtube.com/watch?v=cRfsUrU3RjE
@@ -14,28 +15,37 @@ public class Clienthandler extends Thread{
 
     public Clienthandler(Socket clientsocket) throws IOException {
         this.client = clientsocket;
-        this.outputStream = clientsocket.getOutputStream();
-        this.bufferedReader = new BufferedReader(new InputStreamReader(clientsocket.getInputStream()));
-        outputStream.write("Enter your Username: ".getBytes());
-        this.clientUsername = bufferedReader.readLine();
-        clienthandlers.add(this);
-        sendingMessages("Server: " + clientUsername + " has entered the Chat!");
+
+
 
     }
 
     @Override
     public void run() {
-        handler(client);
+        try {
+            this.bufferedReader = new BufferedReader(new InputStreamReader(client.getInputStream()));
+            this.outputStream = client.getOutputStream();
+            outputStream.write("Enter your Username: ".getBytes());
+            this.clientUsername = bufferedReader.readLine();
+            broadcastServerMessage("Server: " + clientUsername + " has entered the Chat! \n\r");
+            clienthandlers.add(this);
+            handler(client);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
-    public void handler(Socket clientSocket){
+    public void handler(Socket clientSocket) throws IOException {
         String clientMessage;
 
         while (clientSocket.isConnected()){
             try {
-                clientMessage = bufferedReader.readLine();
+                clientMessage =  bufferedReader.readLine();
                 sendingMessages(clientMessage);
-                if (clientMessage.equalsIgnoreCase("quit")){
-                    removeClientHandler();
+                if (clientMessage.equalsIgnoreCase("/quit")){
+                    removeClient();
+                }
+                if (clientMessage.equalsIgnoreCase("/showMembers")){
+                    showClients();
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -43,6 +53,7 @@ public class Clienthandler extends Thread{
 
 
         }
+        removeClient();
 
     }
 
@@ -51,21 +62,46 @@ public class Clienthandler extends Thread{
         String formatedMessage = clientUsername+ ": " + Message;
     for (Clienthandler clienthandler : clienthandlers){
         try{
-            if(!clienthandler.clientUsername.equals(clientUsername)){
+            if (!clienthandler.clientUsername.equals(clientUsername) && Message.equalsIgnoreCase("^[^/]")) {
                 clienthandler.outputStream.write(formatedMessage.getBytes());
                 clienthandler.outputStream.write("\n \r".getBytes());
+            } else if (Message.equalsIgnoreCase("/showmembers") || Message.equalsIgnoreCase("/quit")) {
+
+            } else if (clienthandler.clientUsername.equals(clientUsername) && !Message.equalsIgnoreCase("^[^/]")){
+                clienthandler.outputStream.write("Dieser Befehl ist uns leider unbekannt! Bitte versuchen Sie es erneut.\n \r".getBytes());
             }
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
     }
-    public void removeClientHandler() throws IOException {
+    public void removeClient() throws IOException {
+        outputStream.write("You disconnected from the Server!".getBytes());
         clienthandlers.remove(this);
-        sendingMessages("Server: " + clientUsername + "has left the chat");
         outputStream.close();
         bufferedReader.close();
         client.close();
+        broadcastServerMessage("Server: " + clientUsername + " has left the chat\n\r");
+    }
+    public void showClients() throws IOException {
+        for (Clienthandler clienthandler : clienthandlers){
+            if(clienthandler.clientUsername.equals(clientUsername)){
+                for (Clienthandler clienthandler1 : clienthandlers){
+                    outputStream.write(clienthandler1.clientUsername.getBytes());
+                    outputStream.write("\n \r".getBytes());
+                }
+            }
+        }
+    }
+    public void broadcastServerMessage(String Message){
+        for (Clienthandler clienthandler : clienthandlers){
+            try {
+                clienthandler.outputStream.write(Message.getBytes());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
     }
 

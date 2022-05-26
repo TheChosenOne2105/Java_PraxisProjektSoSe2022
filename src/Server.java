@@ -1,13 +1,14 @@
 import java.io.*;
 import java.net.*;
 
-public class Server extends Thread {
+public class Server {
     //Inspiration durch dieses YouTube Video von Jim Liao : https://www.youtube.com/watch?v=cRfsUrU3RjE
     int port;
 
     public Server(int port) {
         this.port = port;
     }
+
 
 
     public void start() {
