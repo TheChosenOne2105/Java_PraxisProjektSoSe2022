@@ -1,7 +1,6 @@
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
-import java.util.stream.*;
 
 public class Clienthandler extends Thread{
     //Inspiration durch dieses YouTube Video von Jim Liao : https://www.youtube.com/watch?v=cRfsUrU3RjE
@@ -27,7 +26,7 @@ public class Clienthandler extends Thread{
             this.outputStream = client.getOutputStream();
             outputStream.write("Enter your Username: ".getBytes());
             this.clientUsername = bufferedReader.readLine();
-            broadcastServerMessage("Server: " + clientUsername + " has entered the Chat! \n\r");
+            broadcastServerMessage("Server: " + clientUsername + " has entered the Chat! \n \r");
             clienthandlers.add(this);
             handler(client);
         } catch (IOException e) {
@@ -59,15 +58,15 @@ public class Clienthandler extends Thread{
 
 
     public void sendingMessages(String Message){
-        String formatedMessage = clientUsername+ ": " + Message;
+        String formatedMessage = clientUsername+ ": " + Message + "\n \r";
     for (Clienthandler clienthandler : clienthandlers){
         try{
-            if (!clienthandler.clientUsername.equals(clientUsername) && Message.equalsIgnoreCase("^[^/]")) {
+            if (!clienthandler.clientUsername.equals(clientUsername) && !Message.contains("/")) {
                 clienthandler.outputStream.write(formatedMessage.getBytes());
                 clienthandler.outputStream.write("\n \r".getBytes());
             } else if (Message.equalsIgnoreCase("/showmembers") || Message.equalsIgnoreCase("/quit")) {
 
-            } else if (clienthandler.clientUsername.equals(clientUsername) && !Message.equalsIgnoreCase("^[^/]")){
+            } else if (clienthandler.clientUsername.equals(clientUsername) && Message.contains("/")){
                 clienthandler.outputStream.write("Dieser Befehl ist uns leider unbekannt! Bitte versuchen Sie es erneut.\n \r".getBytes());
             }
 
