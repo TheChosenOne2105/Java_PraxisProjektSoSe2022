@@ -76,11 +76,11 @@ public class Clienthandler extends Thread{
     }
     }
     public void removeClient() throws IOException {
-        outputStream.write("You disconnected from the Server!".getBytes());
+        this.outputStream.write("You disconnected from the Server!".getBytes());
         clienthandlers.remove(this);
-        outputStream.close();
-        bufferedReader.close();
-        client.close();
+        this.outputStream.close();
+        this.bufferedReader.close();
+        this.client.close();
         broadcastServerMessage("Server: " + clientUsername + " has left the chat\n\r");
     }
     public void showClients() throws IOException {
