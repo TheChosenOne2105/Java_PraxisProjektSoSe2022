@@ -8,8 +8,7 @@ public class Clienthandler extends Thread{
     final Socket client;
     public static ArrayList<Clienthandler> clienthandlers = new ArrayList<>();
     private String clientUsername;
-
-    private OutputStream outputStream;
+    private BufferedWriter bufferedWriter;
     private BufferedReader bufferedReader;
 
     public Clienthandler(Socket clientsocket) throws IOException {
@@ -23,17 +22,17 @@ public class Clienthandler extends Thread{
     public void run() {
         try {
             this.bufferedReader = new BufferedReader(new InputStreamReader(client.getInputStream()));
-            this.outputStream = client.getOutputStream();
-            outputStream.write("Enter your Username: ".getBytes());
+            this.bufferedWriter = new BufferedWriter(new PrintWriter(client.getOutputStream()));
+
             this.clientUsername = bufferedReader.readLine();
-            broadcastServerMessage("Server: " + clientUsername + " has entered the Chat! \n \r");
+            broadcastServerMessage("Server: " + clientUsername + " has entered the Chat!");
             clienthandlers.add(this);
             handler(client);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            removeClient();
         }
     }
-    public void handler(Socket clientSocket) throws IOException {
+    public void handler(Socket clientSocket){
         String clientMessage;
 
         while (clientSocket.isConnected()){
@@ -42,12 +41,14 @@ public class Clienthandler extends Thread{
                 sendingMessages(clientMessage);
                 if (clientMessage.equalsIgnoreCase("/quit")){
                     removeClient();
+                    break;
                 }
-                if (clientMessage.equalsIgnoreCase("/showMembers")){
+                if (clientMessage.equalsIgnoreCase("/showmembers")){
                     showClients();
                 }
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                removeClient();
+                break;
             }
 
 
@@ -61,44 +62,74 @@ public class Clienthandler extends Thread{
         String formatedMessage = clientUsername+ ": " + Message;
     for (Clienthandler clienthandler : clienthandlers){
         try{
-            if (!clienthandler.clientUsername.equals(clientUsername) && !Message.contains("/")) {
-                clienthandler.outputStream.write(formatedMessage.getBytes());
-                clienthandler.outputStream.write("\n \r".getBytes());
+            if (Message.equalsIgnoreCase("")){
+
+            }
+            else if (!clienthandler.clientUsername.equals(clientUsername) && !Message.contains("/")) {
+                clienthandler.bufferedWriter.write(formatedMessage);
+                clienthandler.bufferedWriter.newLine();
+                clienthandler.bufferedWriter.flush();
+
             } else if (Message.equalsIgnoreCase("/showmembers") || Message.equalsIgnoreCase("/quit")) {
 
             } else if (clienthandler.clientUsername.equals(clientUsername) && Message.contains("/")){
-                clienthandler.outputStream.write("Dieser Befehl ist uns leider unbekannt! Bitte versuchen Sie es erneut.\n \r".getBytes());
+                clienthandler.bufferedWriter.write("Dieser Befehl ist uns leider unbekannt! Bitte versuchen Sie es erneut.");
+                clienthandler.bufferedWriter.newLine();
+                clienthandler.bufferedWriter.flush();
             }
 
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            removeClient();
+            break;
         }
     }
     }
-    public void removeClient() throws IOException {
-        this.outputStream.write("You disconnected from the Server!".getBytes());
-        clienthandlers.remove(this);
-        this.outputStream.close();
-        this.bufferedReader.close();
-        this.client.close();
-        broadcastServerMessage("Server: " + clientUsername + " has left the chat\n\r");
+    public void removeClient() {
+       try {
+           this.bufferedWriter.write("You disconnected from the Server!");
+           clienthandlers.remove(this);
+           broadcastServerMessage("Server: " + clientUsername + " has left the chat");
+           if (bufferedWriter != null) {
+               this.bufferedWriter.close();
+           }
+           if (bufferedReader != null) {
+               this.bufferedReader.close();
+           }
+           if (client != null) {
+               this.client.close();
+           }
+       } catch (IOException e) {
+           e.printStackTrace();
+       }
     }
-    public void showClients() throws IOException {
-        for (Clienthandler clienthandler : clienthandlers){
-            if(clienthandler.clientUsername.equals(clientUsername)){
-                for (Clienthandler clienthandler1 : clienthandlers){
-                    outputStream.write(clienthandler1.clientUsername.getBytes());
-                    outputStream.write("\n \r".getBytes());
+    public void showClients() {
+        try {
+            for (Clienthandler clienthandler : clienthandlers) {
+                if (clienthandler.clientUsername.equals(clientUsername)) {
+                    bufferedWriter.write("Current Users on this Server: ");
+                    bufferedWriter.newLine();
+                    bufferedWriter.flush();
+                    for (Clienthandler clienthandler1 : clienthandlers) {
+                        bufferedWriter.write(clienthandler1.clientUsername);
+                        bufferedWriter.newLine();
+                        bufferedWriter.flush();
+
+                    }
                 }
             }
+        } catch (IOException e) {
+            removeClient();
         }
     }
     public void broadcastServerMessage(String Message){
         for (Clienthandler clienthandler : clienthandlers){
             try {
-                clienthandler.outputStream.write(Message.getBytes());
+                clienthandler.bufferedWriter.write(Message);
+                clienthandler.bufferedWriter.newLine();
+                clienthandler.bufferedWriter.flush();
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                removeClient();
+                break;
             }
         }
     }
