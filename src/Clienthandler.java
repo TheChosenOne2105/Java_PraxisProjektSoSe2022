@@ -23,7 +23,6 @@ public class Clienthandler extends Thread{
         try {
             this.bufferedReader = new BufferedReader(new InputStreamReader(client.getInputStream()));
             this.bufferedWriter = new BufferedWriter(new PrintWriter(client.getOutputStream()));
-
             this.clientUsername = bufferedReader.readLine();
             broadcastServerMessage("Server: " + clientUsername + " has entered the Chat!");
             clienthandlers.add(this);

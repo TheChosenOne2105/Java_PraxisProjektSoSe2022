@@ -1,8 +1,9 @@
 import java.io.*;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.Scanner;
 
-
+//Inspiration durch dieses Video: https://www.youtube.com/watch?v=gLfuZrrfKes
 public class Client {
 
 
@@ -11,10 +12,9 @@ public class Client {
     private BufferedWriter bufferedWriter;
     private String username;
 
-    public Client(Socket socket, String username) {
+    public Client(Socket socket){
         try {
             this.socket = socket;
-            this.username = username;
             this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.bufferedWriter= new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
         } catch (IOException e) {
@@ -24,17 +24,14 @@ public class Client {
     }
 
 
-    public void sendMessage() {
+    public void sendMessage(Scanner scanner, String username) {
         try {
-
             bufferedWriter.write(username);
             bufferedWriter.newLine();
             bufferedWriter.flush();
 
-            Scanner scanner = new Scanner(System.in);
-
             while (socket.isConnected()) {
-                String messageToSend = scanner.nextLine();
+                String messageToSend = scanner.next();
                 bufferedWriter.write(messageToSend);
                 bufferedWriter.newLine();
                 bufferedWriter.flush();
@@ -91,18 +88,19 @@ public class Client {
     }
 
     // Run the program.
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
+        try {
+            Scanner sc = new Scanner(System.in);
+            System.out.println("Enter your username for the group chat: ");
+            String username = sc.nextLine();
+            Client client = new Client(new Socket("localhost", 1833));
 
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter your username for the group chat: ");
-        String username = scanner.nextLine();
-
-        Socket socket = new Socket("localhost", 1833);
-
-
-        Client client = new Client(socket, username);
-
-        client.listenForMessage();
-        client.sendMessage();
+            client.listenForMessage();
+            client.sendMessage(sc, username);
+        } catch (UnknownHostException e) {
+            System.out.println("Server is unreachable");
+        } catch (IOException e) {
+            System.out.println("An Error occurred, please try it again later! Maybe check if the Server is online!");
+        }
     }
 }
