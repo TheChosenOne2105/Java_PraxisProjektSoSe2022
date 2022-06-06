@@ -146,39 +146,40 @@ public class Clienthandler extends Thread{
 
         try {
             for (Clienthandler clienthandler : serverliste) {
-                if(clienthandler.clientUsername.equals(clientUsername))
-                if (Chatroom1.contains(this)) {
-                    Chatroom1.remove(this);
-                } else if (Chatroom2.contains(this)) {
-                    Chatroom2.remove(this);
-                } else if (Chatroom3.contains(this)) {
-                    Chatroom3.remove(this);
-                } else if (Chatroom4.contains(this)) {
-                    Chatroom4.remove(this);
-                } else if (Chatroom5.contains(this)) {
-                    Chatroom5.remove(this);
-                }
+                if(clienthandler.clientUsername.equals(clientUsername)) {
+                    if (Chatroom1.contains(clienthandler)) {
+                        Chatroom1.remove(clienthandler);
+                    } else if (Chatroom2.contains(clienthandler)) {
+                        Chatroom2.remove(clienthandler);
+                    } else if (Chatroom3.contains(clienthandler)) {
+                        Chatroom3.remove(clienthandler);
+                    } else if (Chatroom4.contains(clienthandler)) {
+                        Chatroom4.remove(clienthandler);
+                    } else if (Chatroom5.contains(clienthandler)) {
+                        Chatroom5.remove(clienthandler);
+                    }
 
-                String insert = this.bufferedReader.readLine();
-                if (insert == "1") {
-                    Chatroom1.add(this);
-                    bufferedWriter.write("You successfully joined Chatroom 1!");
-                } else if (insert == "2") {
-                    Chatroom2.add(this);
-                    bufferedWriter.write("You successfully joined Chatroom 2!");
-                } else if (insert == "3") {
-                    Chatroom3.add(this);
-                    bufferedWriter.write("You successfully joined Chatroom 3!");
-                } else if (insert == "4") {
-                    Chatroom4.add(this);
-                    bufferedWriter.write("You successfully joined Chatroom 4!");
-                } else if (insert == "5") {
-                    Chatroom5.add(this);
-                    bufferedWriter.write("You successfully joined Chatroom 5!");
-                } else if (insert == "x") {
-                    bufferedWriter.write("You choosed to stay in your current room! Please type /changeChatroom if you changed your Mind!");
-                } else {
-                    bufferedWriter.write("Error! A Chatroom like that don't exist on this Server. We only have: Chatroom 1, Chatroom 2, Chatroom 3, Chatroom 4, Chatroom 5");
+                    String insert = clienthandler.bufferedReader.readLine();
+                    if (insert == "1") {
+                        Chatroom1.add(clienthandler);
+                        bufferedWriter.write("You successfully joined Chatroom 1!");
+                    } else if (insert == "2") {
+                        Chatroom2.add(clienthandler);
+                        bufferedWriter.write("You successfully joined Chatroom 2!");
+                    } else if (insert == "3") {
+                        Chatroom3.add(clienthandler);
+                        bufferedWriter.write("You successfully joined Chatroom 3!");
+                    } else if (insert == "4") {
+                        Chatroom4.add(clienthandler);
+                        bufferedWriter.write("You successfully joined Chatroom 4!");
+                    } else if (insert == "5") {
+                        Chatroom5.add(clienthandler);
+                        bufferedWriter.write("You successfully joined Chatroom 5!");
+                    } else if (insert == "x") {
+                        bufferedWriter.write("You choosed to stay in your current room! Please type /changeChatroom if you changed your Mind!");
+                    } else {
+                        bufferedWriter.write("Error! A Chatroom like that don't exist on this Server. We only have: Chatroom 1, Chatroom 2, Chatroom 3, Chatroom 4, Chatroom 5");
+                    }
                 }
             }
         } catch (IOException e) {
