@@ -15,6 +15,7 @@ public class Server {
         try {
             System.out.println("Server is starting... ");
             ServerSocket serverSocket = new ServerSocket(port);
+
             while (true) {
                 System.out.println("Waiting for new connections");
                 Socket clientsocket = serverSocket.accept();
