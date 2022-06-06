@@ -10,7 +10,7 @@ public class Client {
     private Socket socket;
     private BufferedReader bufferedReader;
     private BufferedWriter bufferedWriter;
-    private String username;
+
 
     public Client(Socket socket){
         try {
@@ -36,6 +36,7 @@ public class Client {
                 bufferedWriter.newLine();
                 bufferedWriter.flush();
             }
+            closeEverything(socket, bufferedReader, bufferedWriter);
         } catch (IOException e) {
 
             closeEverything(socket, bufferedReader, bufferedWriter);
@@ -65,6 +66,7 @@ public class Client {
                         closeEverything(socket, bufferedReader, bufferedWriter);
                     }
                 }
+                closeEverything(socket, bufferedReader, bufferedWriter);
             }
         }).start();
     }
@@ -94,6 +96,7 @@ public class Client {
             System.out.println("Enter your username for the group chat: ");
             String username = sc.nextLine();
             Client client = new Client(new Socket("localhost", 1833));
+            System.out.println("Succesfully logged into SpeedChat");
 
             client.listenForMessage();
             client.sendMessage(sc, username);
