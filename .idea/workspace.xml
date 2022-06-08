@@ -4,12 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="178099ab-1da0-41c0-a358-3844ec8ce151" name="Changes" comment="Chatrooms fertig!">
+    <list default="true" id="178099ab-1da0-41c0-a358-3844ec8ce151" name="Changes" comment="Chatrooms fertig! Version 1.2">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/ChatApplikation/Clienthandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ChatApplikation/Clienthandler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ChatApplikation/Server.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ChatApplikation/Server.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Clienthandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Clienthandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,6 +69,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="Showclients" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Showclients" />
+      <module name="ChatApplikation" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="db" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="db" />
       <module name="ChatApplikation" />
@@ -79,6 +84,7 @@
       </method>
     </configuration>
     <list>
+      <item itemvalue="Application.Showclients" />
       <item itemvalue="Application.Client" />
       <item itemvalue="Application.db" />
       <item itemvalue="Application.Main" />
@@ -87,6 +93,7 @@
       <list>
         <item itemvalue="Application.Client" />
         <item itemvalue="Application.Main" />
+        <item itemvalue="Application.Showclients" />
         <item itemvalue="Application.db" />
       </list>
     </recent_temporary>
@@ -204,6 +211,6 @@
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/PraxisProjektSoSe2022$Client.ic" NAME="Client Coverage Results" MODIFIED="1654529464785" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/PraxisProjektSoSe2022$Client.ic" NAME="Client Coverage Results" MODIFIED="1654714041930" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
 </project>

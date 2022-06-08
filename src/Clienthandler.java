@@ -1,6 +1,7 @@
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Clienthandler extends Thread {
     //Inspiration durch dieses YouTube Video von Jim Liao : https://www.youtube.com/watch?v=cRfsUrU3RjE
@@ -12,7 +13,7 @@ public class Clienthandler extends Thread {
     public static ArrayList<Clienthandler> Chatroom3 = new ArrayList<>();
     public static ArrayList<Clienthandler> Chatroom4 = new ArrayList<>();
     public static ArrayList<Clienthandler> Chatroom5 = new ArrayList<>();
-    public static ArrayList<ArrayList<Clienthandler>> Chatrooms = new ArrayList<>();
+    public static HashMap <Integer , ArrayList<Clienthandler>> Chatrooms = new HashMap<Integer, ArrayList<Clienthandler>>();
 
 
     private String clientUsername;
@@ -28,6 +29,7 @@ public class Clienthandler extends Thread {
     @Override
     public void run() {
         try {
+            AssigningChatrooms();
             this.bufferedReader = new BufferedReader(new InputStreamReader(client.getInputStream()));
             this.bufferedWriter = new BufferedWriter(new PrintWriter(client.getOutputStream()));
             this.clientUsername = bufferedReader.readLine();
@@ -75,16 +77,10 @@ public class Clienthandler extends Thread {
         ArrayList<Clienthandler> sendingroom = serverliste;
         for (Clienthandler clienthandler : serverliste) {
             if (clienthandler.clientUsername.equals(clientUsername)) {
-                if (Chatroom1.contains(clienthandler)) {
-                    sendingroom = Chatroom1;
-                } else if (Chatroom2.contains(clienthandler)) {
-                    sendingroom = Chatroom2;
-                } else if (Chatroom3.contains(clienthandler)) {
-                    sendingroom = Chatroom3;
-                } else if (Chatroom4.contains(clienthandler)) {
-                    sendingroom = Chatroom4;
-                } else if (Chatroom5.contains(clienthandler)) {
-                    sendingroom = Chatroom5;
+                for(int i=1; i<Chatrooms.size()+1; i++){
+                    if (Chatrooms.get(i).contains(clienthandler)) {
+                    sendingroom = Chatrooms.get(i);
+                }
                 }
             }
         }
@@ -141,9 +137,19 @@ public class Clienthandler extends Thread {
                         bufferedWriter.write(clienthandler1.clientUsername);
                         bufferedWriter.newLine();
                         bufferedWriter.flush();
-
+                    }
+                    for(int i=1; i < Chatrooms.size()+1; i++){
+                        bufferedWriter.write("Current Users in Chatroom " + i);
+                        bufferedWriter.newLine();
+                        bufferedWriter.flush();
+                        for(Clienthandler clienthandler2 : Chatrooms.get(i)){
+                            bufferedWriter.write(clienthandler2.clientUsername);
+                            bufferedWriter.newLine();
+                            bufferedWriter.flush();
+                        }
                     }
                 }
+
             }
         } catch (IOException e) {
             removeClient();
@@ -165,170 +171,67 @@ public class Clienthandler extends Thread {
     }
 
     public void changeChatroom() {
-        boolean CR1 = false;
-        boolean CR2 = false;
-        boolean CR3 = false;
-        boolean CR4 = false;
-        boolean CR5 = false;
+        boolean checker = true;
+        int auswahl = 0;
         try {
             for (Clienthandler clienthandler : serverliste) {
                 if (clienthandler.clientUsername.equals(clientUsername)) {
-                    bufferedWriter.write("Please enter Number of the Chatroom(1-5) that you want to go in: ");
+                    bufferedWriter.write("Please enter Number of the Chatroom(1-5) that you want to go in or x if you want to remain in your current chatroom: " );
                     bufferedWriter.newLine();
                     bufferedWriter.flush();
                     String insert = clienthandler.bufferedReader.readLine();
-                    if (insert.equals("1")) {
-                        if (Chatroom1.contains(clienthandler)) {
-                            bufferedWriter.write("You are already in Chatroom 1!");
+                    for (int i = 1; i < Chatrooms.size()+1; i++) {
+                        if (insert.equals(Integer.toString(i))) {
+                            if (Chatrooms.get(i).contains(clienthandler)) {
+                                bufferedWriter.write("You are already in Chatroom "+ i + " !");
+                                bufferedWriter.newLine();
+                                bufferedWriter.flush();
+                                checker = false;
+                                break;
+                            } else {
+                                Chatrooms.get(i).add(clienthandler);
+                                broadcastServerMessage(clienthandler.clientUsername + " joined Chatroom " + i);
+                                auswahl = i;
+                                checker = false;
+                            }
+                        } }
+                        if (insert.equalsIgnoreCase("x")) {
+                            bufferedWriter.write("You choosed to stay in your current room! Please type /changeChatroom if you changed your Mind!");
                             bufferedWriter.newLine();
                             bufferedWriter.flush();
                             break;
-                        } else {
-                            Chatroom1.add(clienthandler);
-                            broadcastServerMessage(clienthandler.clientUsername + " joined Chatroom 1");
-                            CR1 = true;
-                        }
-                    } else if (insert.equals("2")) {
-                        if (Chatroom2.contains(clienthandler)) {
-                            bufferedWriter.write("You are already in Chatroom 2!");
+                        } else if (checker && !insert.equalsIgnoreCase("x") ) {
+                            bufferedWriter.write("Error! A Chatroom like that don't exist on this Server. We only have: Chatroom 1, Chatroom 2, Chatroom 3, Chatroom 4, Chatroom 5");
                             bufferedWriter.newLine();
                             bufferedWriter.flush();
                             break;
-                        } else {
-                            Chatroom2.add(clienthandler);
-                            broadcastServerMessage(clienthandler.clientUsername + " joined Chatroom 2");
-                            CR2 = true;
-                        }
-                    } else if (insert.equals("3")) {
-                        if (Chatroom3.contains(clienthandler)) {
-                            bufferedWriter.write("You are already in Chatroom 3!");
-                            bufferedWriter.newLine();
-                            bufferedWriter.flush();
-                            break;
-                        } else {
-                            Chatroom3.add(clienthandler);
-                            broadcastServerMessage(clienthandler.clientUsername + " joined Chatroom 3");
-                            CR3 = true;
-                        }
-                        ;
-                    } else if (insert.equals("4")) {
-                        if (Chatroom4.contains(clienthandler)) {
-                            bufferedWriter.write("You are already in Chatroom 4!");
-                            bufferedWriter.newLine();
-                            bufferedWriter.flush();
-                            break;
-                        } else {
-                            Chatroom4.add(clienthandler);
-                            broadcastServerMessage(clienthandler.clientUsername + " joined Chatroom 4");
-                            CR4 = true;
-                        }
-                    } else if (insert.equals("5")) {
-                        if (Chatroom5.contains(clienthandler)) {
-                            bufferedWriter.write("You are already in Chatroom 5!");
-                            bufferedWriter.newLine();
-                            bufferedWriter.flush();
-                            break;
-                        } else {
-                            Chatroom5.add(clienthandler);
-                            broadcastServerMessage(clienthandler.clientUsername + " joined Chatroom 5");
-                            CR5 = true;
-                        }
-                    } else if (insert.equalsIgnoreCase("x")) {
-                        bufferedWriter.write("You choosed to stay in your current room! Please type /changeChatroom if you changed your Mind!");
-                        bufferedWriter.newLine();
-                        bufferedWriter.flush();
-                        break;
-                    } else {
-                        bufferedWriter.write("Error! A Chatroom like that don't exist on this Server. We only have: Chatroom 1, Chatroom 2, Chatroom 3, Chatroom 4, Chatroom 5");
-                        bufferedWriter.newLine();
-                        bufferedWriter.flush();
-                        break;
-                    }
-                    if (CR1) {
-                        if (Chatroom2.contains(clienthandler)) {
-                            broadcastServerMessage(clienthandler.clientUsername + " has left Chatroom 2");
-                            Chatroom2.remove(clienthandler);
-                        } else if (Chatroom3.contains(clienthandler)) {
-                            broadcastServerMessage(clienthandler.clientUsername + " has left Chatroom 3");
-                            Chatroom3.remove(clienthandler);
-                        } else if (Chatroom4.contains(clienthandler)) {
-                            broadcastServerMessage(clienthandler.clientUsername + " has left Chatroom 4");
-                            Chatroom4.remove(clienthandler);
-                        } else if (Chatroom5.contains(clienthandler)) {
-                            broadcastServerMessage(clienthandler.clientUsername + " has left Chatroom 5");
-                            Chatroom5.remove(clienthandler);
-                        }
-                    }
-                    if (CR2) {
-                        if (Chatroom1.contains(clienthandler)) {
-                            broadcastServerMessage(clienthandler.clientUsername + " has left Chatroom 1");
-                            Chatroom1.remove(clienthandler);
-                        } else if (Chatroom3.contains(clienthandler)) {
-                            broadcastServerMessage(clienthandler.clientUsername + " has left Chatroom 3");
-                            Chatroom3.remove(clienthandler);
-                        } else if (Chatroom4.contains(clienthandler)) {
-                            broadcastServerMessage(clienthandler.clientUsername + " has left Chatroom 4");
-                            Chatroom4.remove(clienthandler);
-                        } else if (Chatroom5.contains(clienthandler)) {
-                            broadcastServerMessage(clienthandler.clientUsername + " has left Chatroom 5");
-                            Chatroom5.remove(clienthandler);
-                        }
-                    }
-                    if (CR3) {
-                        if (Chatroom2.contains(clienthandler)) {
-                            broadcastServerMessage(clienthandler.clientUsername + " has left Chatroom 2");
-                            Chatroom2.remove(clienthandler);
-                        } else if (Chatroom1.contains(clienthandler)) {
-                            broadcastServerMessage(clienthandler.clientUsername + " has left Chatroom 1");
-                            Chatroom1.remove(clienthandler);
-                        } else if (Chatroom4.contains(clienthandler)) {
-                            broadcastServerMessage(clienthandler.clientUsername + " has left Chatroom 4");
-                            Chatroom4.remove(clienthandler);
-                        } else if (Chatroom5.contains(clienthandler)) {
-                            broadcastServerMessage(clienthandler.clientUsername + " has left Chatroom 5");
-                            Chatroom5.remove(clienthandler);
-                        }
-                    }
-                    if (CR4) {
-                        if (Chatroom2.contains(clienthandler)) {
-                            broadcastServerMessage(clienthandler.clientUsername + " has left Chatroom 2");
-                            Chatroom2.remove(clienthandler);
-                        } else if (Chatroom3.contains(clienthandler)) {
-                            broadcastServerMessage(clienthandler.clientUsername + " has left Chatroom 3");
-                            Chatroom3.remove(clienthandler);
-                        } else if (Chatroom1.contains(clienthandler)) {
-                            broadcastServerMessage(clienthandler.clientUsername + " has left Chatroom 1");
-                            Chatroom1.remove(clienthandler);
-                        } else if (Chatroom5.contains(clienthandler)) {
-                            broadcastServerMessage(clienthandler.clientUsername + " has left Chatroom 5");
-                            Chatroom5.remove(clienthandler);
-                        }
-                    }
-                    if (CR5) {
-                        if (Chatroom2.contains(clienthandler)) {
-                            broadcastServerMessage(clienthandler.clientUsername + " has left Chatroom 2");
-                            Chatroom2.remove(clienthandler);
-                        } else if (Chatroom3.contains(clienthandler)) {
-                            broadcastServerMessage(clienthandler.clientUsername + " has left Chatroom 3");
-                            Chatroom3.remove(clienthandler);
-                        } else if (Chatroom4.contains(clienthandler)) {
-                            broadcastServerMessage(clienthandler.clientUsername + " has left Chatroom 4");
-                            Chatroom4.remove(clienthandler);
-                        } else if (Chatroom1.contains(clienthandler)) {
-                            broadcastServerMessage(clienthandler.clientUsername + " has left Chatroom 1");
-                            Chatroom1.remove(clienthandler);
-
                         }
 
+                    if(auswahl > 0){
+                        for (int i = 1; i < Chatrooms.size()+1; i++){
+                            if(i != auswahl && Chatrooms.get(i).contains(clienthandler)){
+                                broadcastServerMessage(clienthandler.clientUsername + " has left Chatroom " + i);
+                                Chatrooms.get(i).remove(clienthandler);
+                            }
+                        }
                     }
-
-
                 }
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
+    }
+    public void AssigningChatrooms() throws IOException {
+        if(!(Chatrooms.containsValue(Chatroom1) || Chatrooms.containsValue(Chatroom2) || Chatrooms.containsValue(Chatroom3) || Chatrooms.containsValue(Chatroom4) || Chatrooms.containsValue(Chatroom5))){
+            Chatrooms.put(1, Chatroom1);
+            Chatrooms.put(2, Chatroom2);
+            Chatrooms.put(3, Chatroom3);
+            Chatrooms.put(4, Chatroom4);
+            Chatrooms.put(5, Chatroom5);
+
+
+        }
     }
 }
 
