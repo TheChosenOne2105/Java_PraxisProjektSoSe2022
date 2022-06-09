@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Clienthandler extends Thread {
-    //Inspiration durch dieses YouTube Video von Jim Liao : https://www.youtube.com/watch?v=cRfsUrU3RjE
-    //Inspiration durch dieses YouTube Video: https://www.youtube.com/watch?v=gLfuZrrfKes
+    //Basierend auf dem Code von diesem Tutorial: https://www.youtube.com/watch?v=cRfsUrU3RjE
+    //Basierend auf dem Code von diesem Tutorial: https://www.youtube.com/watch?v=gLfuZrrfKes
     final Socket client;
     public static ArrayList<Clienthandler> serverliste = new ArrayList<>();
     public static ArrayList<Clienthandler> Chatroom1 = new ArrayList<>();

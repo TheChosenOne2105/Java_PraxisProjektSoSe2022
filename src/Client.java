@@ -3,7 +3,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 
-//Inspiration durch dieses Video: https://www.youtube.com/watch?v=gLfuZrrfKes
+//Basierend auf dem Code von diesem Tutorial: https://www.youtube.com/watch?v=gLfuZrrfKes
 public class Client {
 
 

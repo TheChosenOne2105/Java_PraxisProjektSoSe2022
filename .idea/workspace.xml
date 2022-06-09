@@ -4,10 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="178099ab-1da0-41c0-a358-3844ec8ce151" name="Changes" comment="Chatrooms fertig! Version 1.2">
+    <list default="true" id="178099ab-1da0-41c0-a358-3844ec8ce151" name="Changes" comment="Chatrooms fertig! Version 1.3">
+      <change afterPath="$PROJECT_DIR$/.idea/artifacts/ChatApplikation_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/artifacts/ChatApplikation_jar2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/artifacts/ChatApplikation_jar3.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/libs/sqlite-jdbc-3.36.0.3.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Database.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/DatabaseForChatApplication.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ChatApplikation.iml" beforeDir="false" afterPath="$PROJECT_DIR$/ChatApplikation.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/ChatApplikation/Clienthandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ChatApplikation/Clienthandler.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Client.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Clienthandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Clienthandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,17 +56,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">
-    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/libs/db/mysql-connector-java-8.0.29/mysql-connector-java-8.0.29.jar" />
-    <property name="project.structure.last.edited" value="Modules" />
-    <property name="project.structure.proportion" value="0.15" />
-    <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
-  </component>
-  <component name="RunManager" selected="Application.Client">
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "last_opened_file_path": "C:/Users/Simon/PraxisProjektSoSe2022/libs/sqlite-jdbc-3.36.0.3.jar",
+    "project.structure.last.edited": "Libraries",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "settings.editor.selected.configurable": "preferences.lookFeel"
+  }
+}]]></component>
+  <component name="RunManager" selected="Application.Database">
     <configuration name="Client" type="Application" factoryName="Application" singleton="false" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Client" />
+      <module name="ChatApplikation" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Database" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Database" />
       <module name="ChatApplikation" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -84,6 +104,7 @@
       </method>
     </configuration>
     <list>
+      <item itemvalue="Application.Database" />
       <item itemvalue="Application.Showclients" />
       <item itemvalue="Application.Client" />
       <item itemvalue="Application.db" />
@@ -91,6 +112,7 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Database" />
         <item itemvalue="Application.Client" />
         <item itemvalue="Application.Main" />
         <item itemvalue="Application.Showclients" />
@@ -177,7 +199,14 @@
       <option name="project" value="LOCAL" />
       <updated>1654508805005</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Chatrooms fertig! Version 1.3">
+      <created>1654717937636</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1654717937636</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -198,7 +227,8 @@
     <MESSAGE value="Verbesserung Serversocket" />
     <MESSAGE value="Version 0.3 des Servers" />
     <MESSAGE value="Version 0.4 des Servers. [Bugfixing]" />
-    <option name="LAST_COMMIT_MESSAGE" value="Version 0.4 des Servers. [Bugfixing]" />
+    <MESSAGE value="Chatrooms fertig! Version 1.3" />
+    <option name="LAST_COMMIT_MESSAGE" value="Chatrooms fertig! Version 1.3" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
