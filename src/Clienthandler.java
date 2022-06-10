@@ -31,6 +31,7 @@ public class Clienthandler extends Thread {
     @Override
     public void run() {
         try {
+            database.DBstart();
             this.bufferedReader = new BufferedReader(new InputStreamReader(client.getInputStream()));
             this.bufferedWriter = new BufferedWriter(new PrintWriter(client.getOutputStream()));
             LoginOrRegister();

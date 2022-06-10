@@ -14,7 +14,7 @@ import java.util.Scanner;
 public class Database {
 
 
-    public static void DBstart() {
+    public void DBstart() {
         //Code von: https://www.sqlitetutorial.net/sqlite-java/sqlite-jdbc-driver/
         Connection conn = null;
         Statement stmt = null;
@@ -59,7 +59,8 @@ public class Database {
     public void insertIntoOldMessages(String Message, int ChatroomAdresse) {
         Connection conn = null;
         Statement stmt = null;
-        String Messagekey = LocalDateTime.now().toString();
+        DateTimeFormatter DateTimeFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss:SS");
+        String Messagekey = LocalDateTime.now().format(DateTimeFormat).toString();
 
 
         try {
@@ -86,6 +87,7 @@ public class Database {
         Statement stmt = null;
         ArrayList<String> loadingMessages = new ArrayList<String>();
 
+
         try {
             String s = String.valueOf(Path.of("").toAbsolutePath());
             String url = "jdbc:sqlite:" + s + "/src/DatabaseForChatApplication.db";
@@ -94,10 +96,10 @@ public class Database {
             // create a connection to the database
             conn = DriverManager.getConnection(url);
             stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(String.format("Select MESSAGE FROM MESSAGES WHERE ADDRESS = %o", Addresse));
+            ResultSet rs = stmt.executeQuery(String.format("Select MESSAGE, TIME FROM MESSAGES WHERE ADDRESS = %o", Addresse));
 
             while (rs.next()) {
-                String returnMessage = rs.getString("Message");
+                String returnMessage = "["+ rs.getString("TIME")+ "] " + rs.getString("Message");
                 loadingMessages.add(returnMessage);
             }
             stmt.close();
@@ -197,10 +199,7 @@ public class Database {
     }
 
 
-    public static void main(String[] args) {
-        DBstart();
 
-    }
 }
 
 
