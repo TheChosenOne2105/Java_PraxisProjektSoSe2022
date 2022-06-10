@@ -92,7 +92,7 @@ public class Client {
             Scanner sc = new Scanner(System.in);
 
             Client client = new Client(new Socket("localhost", 1833));
-            System.out.println("Succesfully logged into SpeedChat");
+
 
             client.listenForMessage();
             client.sendMessage(sc);

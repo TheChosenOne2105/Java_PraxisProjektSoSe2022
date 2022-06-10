@@ -1,24 +1,19 @@
 
 
-import java.io.BufferedReader;
-import java.io.PrintWriter;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.sql.*;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Properties;
 import java.time.*;
-import java.util.Scanner;
 
 public class Database {
 
 
     public void DBstart() {
-        //Code von: https://www.sqlitetutorial.net/sqlite-java/sqlite-jdbc-driver/
+        //Code basierend auf den Tutorials auf dieser Seite: https://www.sqlitetutorial.net/sqlite-java/sqlite-jdbc-driver/
         Connection conn = null;
-        Statement stmt = null;
-        Statement stmt2 = null;
+        Statement stmt;
+        Statement stmt2;
         try {
             // db parameters
             String s = String.valueOf(Path.of("").toAbsolutePath());
@@ -57,10 +52,10 @@ public class Database {
     }
 
     public void insertIntoOldMessages(String Message, int ChatroomAdresse) {
-        Connection conn = null;
-        Statement stmt = null;
+        Connection conn;
+        Statement stmt;
         DateTimeFormatter DateTimeFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss:SS");
-        String Messagekey = LocalDateTime.now().format(DateTimeFormat).toString();
+        String Messagekey = LocalDateTime.now().format(DateTimeFormat);
 
 
         try {
@@ -82,10 +77,10 @@ public class Database {
         }
     }
 
-    public ArrayList LoadingOldMessages(int Addresse) {
-        Connection conn = null;
-        Statement stmt = null;
-        ArrayList<String> loadingMessages = new ArrayList<String>();
+    public ArrayList<String> LoadingOldMessages(int Addresse) {
+        Connection conn;
+        Statement stmt;
+        ArrayList<String> loadingMessages = new ArrayList<>();
 
 
         try {
@@ -112,9 +107,9 @@ public class Database {
     }
 
         public void insertIntoUserHandling(String Username, String Password) {
-            Connection conn = null;
-            Statement stmt = null;
-            String Messagekey = LocalDateTime.now().toString();
+            Connection conn;
+            Statement stmt;
+
 
 
             try {
@@ -137,9 +132,9 @@ public class Database {
         }
             public boolean UsernameCheck(String Username) {
                 boolean check;
-                Connection conn = null;
-                Statement stmt = null;
-                ArrayList<String> Usernames = new ArrayList<String>();
+                Connection conn;
+                Statement stmt;
+                ArrayList<String> Usernames = new ArrayList<>();
                 try {
                     String s = String.valueOf(Path.of("").toAbsolutePath());
                     String url = "jdbc:sqlite:" + s + "/src/DatabaseForChatApplication.db";
@@ -153,11 +148,7 @@ public class Database {
                         String UsernameToAdd = rs.getString("Username");
                         Usernames.add(UsernameToAdd);
                     }
-                    if(Usernames.contains(Username)){
-                        check = false;
-                    } else {
-                        check = true;
-                    }
+                    check = !Usernames.contains(Username);
                     stmt.close();
                     conn.close();
                 return check;
@@ -168,9 +159,9 @@ public class Database {
             }
     public boolean PasswordCheck(String Username, String Password) {
         boolean check;
-        Connection conn = null;
-        Statement stmt = null;
-        ArrayList<String> PASSWORDS = new ArrayList<String>();
+        Connection conn;
+        Statement stmt;
+        ArrayList<String> PASSWORDS = new ArrayList<>();
         try {
             String s = String.valueOf(Path.of("").toAbsolutePath());
             String url = "jdbc:sqlite:" + s + "/src/DatabaseForChatApplication.db";
@@ -184,11 +175,7 @@ public class Database {
                 String UsernameToAdd = rs.getString("PASSWORD");
                 PASSWORDS.add(UsernameToAdd);
             }
-            if(PASSWORDS.contains(Password)){
-                check = true;
-            } else {
-                check = false;
-            }
+            check = PASSWORDS.contains(Password);
             stmt.close();
             conn.close();
             return check;

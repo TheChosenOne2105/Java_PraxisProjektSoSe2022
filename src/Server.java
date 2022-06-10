@@ -1,9 +1,11 @@
+
 import java.io.*;
 import java.net.*;
 
 public class Server {
     //Basierend auf dem Code von diesem Tutorial: https://www.youtube.com/watch?v=cRfsUrU3RjE
     int port;
+
 
     public Server(int port) {
         this.port = port;

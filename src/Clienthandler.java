@@ -14,7 +14,7 @@ public class Clienthandler extends Thread {
     public static ArrayList<Clienthandler> Chatroom3 = new ArrayList<>();
     public static ArrayList<Clienthandler> Chatroom4 = new ArrayList<>();
     public static ArrayList<Clienthandler> Chatroom5 = new ArrayList<>();
-    public static HashMap <Integer , ArrayList<Clienthandler>> Chatrooms = new HashMap<Integer, ArrayList<Clienthandler>>();
+    public static HashMap <Integer , ArrayList<Clienthandler>> Chatrooms = new HashMap<>();
 
 
     private String clientUsername;
@@ -308,7 +308,7 @@ public class Clienthandler extends Thread {
             String Username;
             String Password;
             while (true) {
-                bufferedWriter.write("Please type in your  Username: ");
+                bufferedWriter.write("Please type in your Username: ");
                 bufferedWriter.newLine();
                 bufferedWriter.flush();
                  Username=bufferedReader.readLine();
@@ -321,7 +321,7 @@ public class Clienthandler extends Thread {
                 }
             }
             while (true){
-                bufferedWriter.write("Please type in your  Password: ");
+                bufferedWriter.write("Please type in your Password: ");
                 bufferedWriter.newLine();
                 bufferedWriter.flush();
                 Password=bufferedReader.readLine();
@@ -345,6 +345,9 @@ public class Clienthandler extends Thread {
     public void LoginOrRegister(){
         String auswahl;
         try {
+            bufferedWriter.write("Successfully connected to Speedchat!");
+            bufferedWriter.newLine();
+            bufferedWriter.flush();
             while (true) {
                 bufferedWriter.write("Please choose if you want to login or register! For Login 1 and for Register 2, x for leaving the ChatProgramm");
                 bufferedWriter.newLine();
