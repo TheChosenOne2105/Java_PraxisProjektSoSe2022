@@ -164,7 +164,7 @@ public class Database {
                 }
 
             }
-    public static boolean PasswordCheck(String Username, String Password) {
+    public boolean PasswordCheck(String Username, String Password) {
         boolean check;
         Connection conn = null;
         Statement stmt = null;
@@ -180,7 +180,7 @@ public class Database {
             System.out.println(String.format("Select PASSWORD FROM USERHANDLING where USERNAME = '%s", Username + "'"));
             ResultSet rs = stmt.executeQuery(String.format("Select PASSWORD FROM USERHANDLING where USERNAME = '%s", Username + "'"));
             while (rs.next()){
-                String UsernameToAdd = rs.getString("Username");
+                String UsernameToAdd = rs.getString("PASSWORD");
                 PASSWORDS.add(UsernameToAdd);
             }
             if(PASSWORDS.contains(Password)){
@@ -200,7 +200,7 @@ public class Database {
 
     public static void main(String[] args) {
         DBstart();
-        System.out.println(PasswordCheck("Simon", "210501"));
+
     }
 }
 

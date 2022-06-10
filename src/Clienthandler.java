@@ -1,4 +1,4 @@
-import javax.xml.crypto.Data;
+
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
@@ -253,7 +253,7 @@ public class Clienthandler extends Thread {
 
         }
     }
-    public void register(){
+    public String register(){
         try {
             String Username;
             String Password;
@@ -294,12 +294,14 @@ public class Clienthandler extends Thread {
                 bufferedWriter.newLine();
                 bufferedWriter.flush();
             }
+            return Username;
         } catch (IOException e) {
             removeClient();
+            return null;
         }
 
     }
-    public void Login(){
+    public String Login(){
         try {
             String Username;
             String Password;
@@ -316,8 +318,42 @@ public class Clienthandler extends Thread {
                     bufferedWriter.flush();
                 }
             }
+            while (true){
+                bufferedWriter.write("Please type in your  Password: ");
+                bufferedWriter.newLine();
+                bufferedWriter.flush();
+                Password=bufferedReader.readLine();
+                if (database.PasswordCheck(Username, Password)){
+                    bufferedWriter.write("Login successful");
+                    bufferedWriter.newLine();
+                    bufferedWriter.flush();
+                    break;
+                } else {
+                    bufferedWriter.write("Password is wrong! Please try it again");
+                    bufferedWriter.newLine();
+                    bufferedWriter.flush();
+                }
+            }
+            return Username;
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            removeClient();
+            return null;
+        }
+    }
+    public void LoginOrRegister(){
+        String auswahl;
+        try {
+            while (true) {
+                bufferedWriter.write("Please choose if you want to login or register! For Login 1 and for Register 2, x for leaving the Programm");
+                bufferedWriter.newLine();
+                bufferedWriter.flush();
+                auswahl = bufferedReader.readLine();
+                if(auswahl.equals("1")){
+
+                }
+            }
+        } catch (IOException e) {
+            removeClient();
         }
     }
 }
