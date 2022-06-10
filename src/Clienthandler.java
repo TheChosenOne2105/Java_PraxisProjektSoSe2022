@@ -178,6 +178,7 @@ public class Clienthandler extends Thread {
     }
 
     public void changeChatroom() {
+        Database database = new Database();
         boolean checker = true;
         int auswahl = 0;
         try {
@@ -198,6 +199,18 @@ public class Clienthandler extends Thread {
                             } else {
                                 Chatrooms.get(i).add(clienthandler);
                                 broadcastServerMessage(clienthandler.clientUsername + " joined Chatroom " + i);
+                                ArrayList<String> LoadedMessages = database.LoadingOldMessages(i);
+                                bufferedWriter.write("Old Messages of Chatroom " + i+ ":");
+                                bufferedWriter.newLine();
+                                bufferedWriter.flush();
+                                for(String string: LoadedMessages){
+                                    bufferedWriter.write(string);
+                                    bufferedWriter.newLine();
+                                    bufferedWriter.flush();
+                                }
+                                bufferedWriter.write("New Messages:");
+                                bufferedWriter.newLine();
+                                bufferedWriter.flush();
                                 auswahl = i;
                                 checker = false;
                             }

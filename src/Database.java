@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.*;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Properties;
 import java.time.*;
 import java.util.Scanner;
@@ -13,7 +14,7 @@ import java.util.Scanner;
 public class Database {
 
 
-    public void connect() {
+    public static void connect() {
         //Code von: https://www.sqlitetutorial.net/sqlite-java/sqlite-jdbc-driver/
         Connection conn = null;
         Statement stmt = null;
@@ -72,11 +73,10 @@ public class Database {
             throw new RuntimeException(e);
         }
     }
-    public static void LoadingOldMessages(int Addresse){
+    public ArrayList LoadingOldMessages(int Addresse){
         Connection conn = null;
         Statement stmt = null;
-        String Messagekey = LocalDateTime.now().toString();
-
+        ArrayList<String> loadingMessages = new ArrayList<String>();
 
         try {
             String s = String.valueOf(Path.of("").toAbsolutePath());
@@ -89,20 +89,22 @@ public class Database {
             ResultSet rs = stmt.executeQuery(String.format("Select MESSAGE FROM MESSAGES WHERE ADDRESS = %o", Addresse));
 
             while (rs.next()){
-                String Message = rs.getString("MESSAGE");
-                System.out.println(Message);
+                String returnMessage = rs.getString("Message");
+                loadingMessages.add(returnMessage);
             }
+            stmt.close();
             conn.close();
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
+        return loadingMessages;
 
     }
 
     public static void main(String[] args) {
-        LoadingOldMessages(3);
+connect();
+
     }
 }
 
