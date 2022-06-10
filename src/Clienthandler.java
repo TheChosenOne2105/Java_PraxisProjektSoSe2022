@@ -31,10 +31,10 @@ public class Clienthandler extends Thread {
     @Override
     public void run() {
         try {
-            AssigningChatrooms();
             this.bufferedReader = new BufferedReader(new InputStreamReader(client.getInputStream()));
             this.bufferedWriter = new BufferedWriter(new PrintWriter(client.getOutputStream()));
-            this.clientUsername = bufferedReader.readLine();
+            LoginOrRegister();
+            AssigningChatrooms();
             broadcastServerMessage(clientUsername + " has entered the Chat!");
             serverliste.add(this);
             changeChatroom();
@@ -282,18 +282,19 @@ public class Clienthandler extends Thread {
                 bufferedWriter.newLine();
                 bufferedWriter.flush();
                 Password = bufferedReader.readLine();
-                if(Password.equals("")){
+                if (Password.equals("")) {
                     bufferedWriter.write("Please enter a Password!");
                     bufferedWriter.newLine();
                     bufferedWriter.flush();
                 } else {
                     break;
                 }
+            }
                 database.insertIntoUserHandling(Username, Password);
                 bufferedWriter.write("You register is completed!");
                 bufferedWriter.newLine();
                 bufferedWriter.flush();
-            }
+
             return Username;
         } catch (IOException e) {
             removeClient();
@@ -309,7 +310,7 @@ public class Clienthandler extends Thread {
                 bufferedWriter.write("Please type in your  Username: ");
                 bufferedWriter.newLine();
                 bufferedWriter.flush();
-                Username=bufferedReader.readLine();
+                 Username=bufferedReader.readLine();
                 if(!database.UsernameCheck(Username)){
                     break;
                 } else {
@@ -344,12 +345,19 @@ public class Clienthandler extends Thread {
         String auswahl;
         try {
             while (true) {
-                bufferedWriter.write("Please choose if you want to login or register! For Login 1 and for Register 2, x for leaving the Programm");
+                bufferedWriter.write("Please choose if you want to login or register! For Login 1 and for Register 2, x for leaving the ChatProgramm");
                 bufferedWriter.newLine();
                 bufferedWriter.flush();
                 auswahl = bufferedReader.readLine();
                 if(auswahl.equals("1")){
-
+                this.clientUsername = Login();
+                break;
+                } else if (auswahl.equals("2")) {
+                    this.clientUsername = register();
+                    break;
+                } else if (auswahl.equalsIgnoreCase("x")) {
+                    removeClient();
+                    break;
                 }
             }
         } catch (IOException e) {

@@ -177,16 +177,15 @@ public class Database {
             // create a connection to the database
             conn = DriverManager.getConnection(url);
             stmt = conn.createStatement();
-            System.out.println(String.format("Select PASSWORD FROM USERHANDLING where USERNAME = '%s", Username + "'"));
             ResultSet rs = stmt.executeQuery(String.format("Select PASSWORD FROM USERHANDLING where USERNAME = '%s", Username + "'"));
             while (rs.next()){
                 String UsernameToAdd = rs.getString("PASSWORD");
                 PASSWORDS.add(UsernameToAdd);
             }
             if(PASSWORDS.contains(Password)){
-                check = false;
-            } else {
                 check = true;
+            } else {
+                check = false;
             }
             stmt.close();
             conn.close();
