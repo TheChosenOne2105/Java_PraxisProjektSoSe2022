@@ -1,3 +1,4 @@
+import javax.xml.crypto.Data;
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
@@ -73,6 +74,8 @@ public class Clienthandler extends Thread {
 
 
     public void sendingMessages(String Message) {
+        Database database = new Database();
+        int Adresse =1 ;
         String formatedMessage = clientUsername + ": " + Message;
         ArrayList<Clienthandler> sendingroom = serverliste;
         for (Clienthandler clienthandler : serverliste) {
@@ -80,6 +83,9 @@ public class Clienthandler extends Thread {
                 for(int i=1; i<Chatrooms.size()+1; i++){
                     if (Chatrooms.get(i).contains(clienthandler)) {
                     sendingroom = Chatrooms.get(i);
+                    if(!Message.contains("/") && !Message.equals("")) {
+                        database.insertIntoDatabase(formatedMessage, i);
+                    }
                 }
                 }
             }
@@ -92,6 +98,7 @@ public class Clienthandler extends Thread {
                     clienthandler.bufferedWriter.write(formatedMessage);
                     clienthandler.bufferedWriter.newLine();
                     clienthandler.bufferedWriter.flush();
+
 
                 } else if (Message.equalsIgnoreCase("/showmembers") || Message.equalsIgnoreCase("/quit") || Message.equalsIgnoreCase("/changeChatroom")) {
 
