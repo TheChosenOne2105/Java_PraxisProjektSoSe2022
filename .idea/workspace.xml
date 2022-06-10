@@ -59,7 +59,7 @@
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;
   }
 }</component>
-  <component name="RunManager" selected="Application.Client">
+  <component name="RunManager" selected="Application.Database">
     <configuration name="Client" type="Application" factoryName="Application" singleton="false" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Client" />
       <module name="ChatApplikation" />
@@ -118,9 +118,9 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Database" />
         <item itemvalue="Application.Client" />
         <item itemvalue="Application.Main" />
-        <item itemvalue="Application.Database" />
         <item itemvalue="Application.db" />
         <item itemvalue="Application.Showclients" />
       </list>
@@ -226,7 +226,14 @@
       <option name="project" value="LOCAL" />
       <updated>1654860787510</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Test">
+      <created>1654865510709</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1654865510710</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -257,6 +264,10 @@
         <breakpoint enabled="true" type="java-exception">
           <properties class="java.lang.NullPointerException" package="java.lang" />
           <option name="timeStamp" value="1" />
+        </breakpoint>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.util.IllegalFormatConversionException" package="java.util" />
+          <option name="timeStamp" value="2" />
         </breakpoint>
       </breakpoints>
     </breakpoint-manager>

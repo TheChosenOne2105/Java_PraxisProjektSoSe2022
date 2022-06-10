@@ -18,6 +18,7 @@ public class Clienthandler extends Thread {
 
 
     private String clientUsername;
+    Database database = new Database();
     private BufferedWriter bufferedWriter;
     private BufferedReader bufferedReader;
 
@@ -75,7 +76,6 @@ public class Clienthandler extends Thread {
 
     public void sendingMessages(String Message) {
         Database database = new Database();
-        int Adresse =1 ;
         String formatedMessage = clientUsername + ": " + Message;
         ArrayList<Clienthandler> sendingroom = serverliste;
         for (Clienthandler clienthandler : serverliste) {
@@ -84,7 +84,7 @@ public class Clienthandler extends Thread {
                     if (Chatrooms.get(i).contains(clienthandler)) {
                     sendingroom = Chatrooms.get(i);
                     if(!Message.contains("/") && !Message.equals("")) {
-                        database.insertIntoDatabase(formatedMessage, i);
+                        database.insertIntoOldMessages(formatedMessage, i);
                     }
                 }
                 }
@@ -238,7 +238,7 @@ public class Clienthandler extends Thread {
                 }
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            removeClient();
         }
 
     }
@@ -251,6 +251,73 @@ public class Clienthandler extends Thread {
             Chatrooms.put(5, Chatroom5);
 
 
+        }
+    }
+    public void register(){
+        try {
+            String Username;
+            String Password;
+            while (true) {
+                bufferedWriter.write("Please type in your wished Username: ");
+                bufferedWriter.newLine();
+                bufferedWriter.flush();
+                Username = bufferedReader.readLine();
+                if (database.UsernameCheck(Username)) {
+                    bufferedWriter.write("Username is available!");
+                    bufferedWriter.newLine();
+                    bufferedWriter.flush();
+                    break;
+                } else if (Username.equals("")) {
+                    bufferedWriter.write("Please enter a Username!");
+                    bufferedWriter.newLine();
+                    bufferedWriter.flush();
+                } else {
+                    bufferedWriter.write("Username is already taken! Please try it again!");
+                    bufferedWriter.newLine();
+                    bufferedWriter.flush();
+                }
+            }
+            while (true) {
+                bufferedWriter.write("Please type in your wished Password: ");
+                bufferedWriter.newLine();
+                bufferedWriter.flush();
+                Password = bufferedReader.readLine();
+                if(Password.equals("")){
+                    bufferedWriter.write("Please enter a Password!");
+                    bufferedWriter.newLine();
+                    bufferedWriter.flush();
+                } else {
+                    break;
+                }
+                database.insertIntoUserHandling(Username, Password);
+                bufferedWriter.write("You register is completed!");
+                bufferedWriter.newLine();
+                bufferedWriter.flush();
+            }
+        } catch (IOException e) {
+            removeClient();
+        }
+
+    }
+    public void Login(){
+        try {
+            String Username;
+            String Password;
+            while (true) {
+                bufferedWriter.write("Please type in your  Username: ");
+                bufferedWriter.newLine();
+                bufferedWriter.flush();
+                Username=bufferedReader.readLine();
+                if(!database.UsernameCheck(Username)){
+                    break;
+                } else {
+                    bufferedWriter.write("There is no User with a Username: " + Username + "! Please try it again!");
+                    bufferedWriter.newLine();
+                    bufferedWriter.flush();
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }
