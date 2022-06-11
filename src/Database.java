@@ -91,7 +91,7 @@ public class Database {
             // create a connection to the database
             conn = DriverManager.getConnection(url);
             stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(String.format("Select MESSAGE, TIME FROM MESSAGES WHERE ADDRESS = %o", Addresse));
+            ResultSet rs = stmt.executeQuery(String.format("Select MESSAGE, TIME FROM MESSAGES WHERE ADDRESS = %o", Addresse) + " ORDER BY TIME DESC LIMIT 10;");
 
             while (rs.next()) {
                 String returnMessage = "["+ rs.getString("TIME")+ "] " + rs.getString("Message");

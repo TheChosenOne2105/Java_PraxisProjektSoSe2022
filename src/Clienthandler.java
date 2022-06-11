@@ -2,6 +2,7 @@
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class Clienthandler extends Thread {
@@ -201,6 +202,9 @@ public class Clienthandler extends Thread {
                                 Chatrooms.get(i).add(clienthandler);
                                 broadcastServerMessage(clienthandler.clientUsername + " joined Chatroom " + i);
                                 ArrayList<String> LoadedMessages = database.LoadingOldMessages(i);
+
+                                Collections.reverse(LoadedMessages);
+
                                 bufferedWriter.write("Old Messages of Chatroom " + i+ ":");
                                 bufferedWriter.newLine();
                                 bufferedWriter.flush();
