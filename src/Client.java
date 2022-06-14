@@ -3,7 +3,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 
-//Inspiration durch dieses Video: https://www.youtube.com/watch?v=gLfuZrrfKes
+//Basierend auf dem Code von diesem Tutorial: https://www.youtube.com/watch?v=gLfuZrrfKes
 public class Client {
 
 
@@ -24,11 +24,8 @@ public class Client {
     }
 
 
-    public void sendMessage(Scanner scanner, String username) {
+    public void sendMessage(Scanner scanner) {
         try {
-            bufferedWriter.write(username);
-            bufferedWriter.newLine();
-            bufferedWriter.flush();
 
             while (socket.isConnected()) {
                 String messageToSend = scanner.nextLine();
@@ -93,13 +90,12 @@ public class Client {
     public static void main(String[] args) {
         try {
             Scanner sc = new Scanner(System.in);
-            System.out.println("Enter your username for the group chat: ");
-            String username = sc.nextLine();
+
             Client client = new Client(new Socket("localhost", 1833));
-            System.out.println("Succesfully logged into SpeedChat");
+
 
             client.listenForMessage();
-            client.sendMessage(sc, username);
+            client.sendMessage(sc);
         } catch (UnknownHostException e) {
             System.out.println("Server is unreachable");
         } catch (IOException e) {

@@ -1,11 +1,13 @@
+
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class Clienthandler extends Thread {
-    //Inspiration durch dieses YouTube Video von Jim Liao : https://www.youtube.com/watch?v=cRfsUrU3RjE
-    //Inspiration durch dieses YouTube Video: https://www.youtube.com/watch?v=gLfuZrrfKes
+    //Basierend auf dem Code von diesem Tutorial: https://www.youtube.com/watch?v=cRfsUrU3RjE
+    //Basierend auf dem Code von diesem Tutorial: https://www.youtube.com/watch?v=gLfuZrrfKes
     final Socket client;
     public static ArrayList<Clienthandler> serverliste = new ArrayList<>();
     public static ArrayList<Clienthandler> Chatroom1 = new ArrayList<>();
@@ -13,10 +15,11 @@ public class Clienthandler extends Thread {
     public static ArrayList<Clienthandler> Chatroom3 = new ArrayList<>();
     public static ArrayList<Clienthandler> Chatroom4 = new ArrayList<>();
     public static ArrayList<Clienthandler> Chatroom5 = new ArrayList<>();
-    public static HashMap <Integer , ArrayList<Clienthandler>> Chatrooms = new HashMap<Integer, ArrayList<Clienthandler>>();
+    public static HashMap <Integer , ArrayList<Clienthandler>> Chatrooms = new HashMap<>();
 
 
     private String clientUsername;
+    Database database = new Database();
     private BufferedWriter bufferedWriter;
     private BufferedReader bufferedReader;
 
@@ -29,10 +32,11 @@ public class Clienthandler extends Thread {
     @Override
     public void run() {
         try {
-            AssigningChatrooms();
+            database.DBstart();
             this.bufferedReader = new BufferedReader(new InputStreamReader(client.getInputStream()));
             this.bufferedWriter = new BufferedWriter(new PrintWriter(client.getOutputStream()));
-            this.clientUsername = bufferedReader.readLine();
+            LoginOrRegister();
+            AssigningChatrooms();
             broadcastServerMessage(clientUsername + " has entered the Chat!");
             serverliste.add(this);
             changeChatroom();
@@ -73,6 +77,7 @@ public class Clienthandler extends Thread {
 
 
     public void sendingMessages(String Message) {
+        Database database = new Database();
         String formatedMessage = clientUsername + ": " + Message;
         ArrayList<Clienthandler> sendingroom = serverliste;
         for (Clienthandler clienthandler : serverliste) {
@@ -80,6 +85,9 @@ public class Clienthandler extends Thread {
                 for(int i=1; i<Chatrooms.size()+1; i++){
                     if (Chatrooms.get(i).contains(clienthandler)) {
                     sendingroom = Chatrooms.get(i);
+                    if(!Message.contains("/") && !Message.equals("")) {
+                        database.insertIntoOldMessages(formatedMessage, i);
+                    }
                 }
                 }
             }
@@ -92,6 +100,7 @@ public class Clienthandler extends Thread {
                     clienthandler.bufferedWriter.write(formatedMessage);
                     clienthandler.bufferedWriter.newLine();
                     clienthandler.bufferedWriter.flush();
+
 
                 } else if (Message.equalsIgnoreCase("/showmembers") || Message.equalsIgnoreCase("/quit") || Message.equalsIgnoreCase("/changeChatroom")) {
 
@@ -171,6 +180,7 @@ public class Clienthandler extends Thread {
     }
 
     public void changeChatroom() {
+        Database database = new Database();
         boolean checker = true;
         int auswahl = 0;
         try {
@@ -191,6 +201,21 @@ public class Clienthandler extends Thread {
                             } else {
                                 Chatrooms.get(i).add(clienthandler);
                                 broadcastServerMessage(clienthandler.clientUsername + " joined Chatroom " + i);
+                                ArrayList<String> LoadedMessages = database.LoadingOldMessages(i);
+
+                                Collections.reverse(LoadedMessages);
+
+                                bufferedWriter.write("Old Messages of Chatroom " + i+ ":");
+                                bufferedWriter.newLine();
+                                bufferedWriter.flush();
+                                for(String string: LoadedMessages){
+                                    bufferedWriter.write(string);
+                                    bufferedWriter.newLine();
+                                    bufferedWriter.flush();
+                                }
+                                bufferedWriter.write("New Messages:");
+                                bufferedWriter.newLine();
+                                bufferedWriter.flush();
                                 auswahl = i;
                                 checker = false;
                             }
@@ -218,7 +243,7 @@ public class Clienthandler extends Thread {
                 }
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            removeClient();
         }
 
     }
@@ -231,6 +256,120 @@ public class Clienthandler extends Thread {
             Chatrooms.put(5, Chatroom5);
 
 
+        }
+    }
+    public String register(){
+        try {
+            String Username;
+            String Password;
+            while (true) {
+                bufferedWriter.write("Please type in your wished Username: ");
+                bufferedWriter.newLine();
+                bufferedWriter.flush();
+                Username = bufferedReader.readLine();
+                if (database.UsernameCheck(Username)) {
+                    bufferedWriter.write("Username is available!");
+                    bufferedWriter.newLine();
+                    bufferedWriter.flush();
+                    break;
+                } else if (Username.equals("")) {
+                    bufferedWriter.write("Please enter a Username!");
+                    bufferedWriter.newLine();
+                    bufferedWriter.flush();
+                } else {
+                    bufferedWriter.write("Username is already taken! Please try it again!");
+                    bufferedWriter.newLine();
+                    bufferedWriter.flush();
+                }
+            }
+            while (true) {
+                bufferedWriter.write("Please type in your wished Password: ");
+                bufferedWriter.newLine();
+                bufferedWriter.flush();
+                Password = bufferedReader.readLine();
+                if (Password.equals("")) {
+                    bufferedWriter.write("Please enter a Password!");
+                    bufferedWriter.newLine();
+                    bufferedWriter.flush();
+                } else {
+                    break;
+                }
+            }
+                database.insertIntoUserHandling(Username, Password);
+                bufferedWriter.write("You register is completed!");
+                bufferedWriter.newLine();
+                bufferedWriter.flush();
+
+            return Username;
+        } catch (IOException e) {
+            removeClient();
+            return null;
+        }
+
+    }
+    public String Login(){
+        try {
+            String Username;
+            String Password;
+            while (true) {
+                bufferedWriter.write("Please type in your Username: ");
+                bufferedWriter.newLine();
+                bufferedWriter.flush();
+                 Username=bufferedReader.readLine();
+                if(!database.UsernameCheck(Username)){
+                    break;
+                } else {
+                    bufferedWriter.write("There is no User with a Username: " + Username + "! Please try it again!");
+                    bufferedWriter.newLine();
+                    bufferedWriter.flush();
+                }
+            }
+            while (true){
+                bufferedWriter.write("Please type in your Password: ");
+                bufferedWriter.newLine();
+                bufferedWriter.flush();
+                Password=bufferedReader.readLine();
+                if (database.PasswordCheck(Username, Password)){
+                    bufferedWriter.write("Login successful");
+                    bufferedWriter.newLine();
+                    bufferedWriter.flush();
+                    break;
+                } else {
+                    bufferedWriter.write("Password is wrong! Please try it again");
+                    bufferedWriter.newLine();
+                    bufferedWriter.flush();
+                }
+            }
+            return Username;
+        } catch (IOException e) {
+            removeClient();
+            return null;
+        }
+    }
+    public void LoginOrRegister(){
+        String auswahl;
+        try {
+            bufferedWriter.write("Successfully connected to Speedchat!");
+            bufferedWriter.newLine();
+            bufferedWriter.flush();
+            while (true) {
+                bufferedWriter.write("Please choose if you want to login or register! For Login 1 and for Register 2, x for leaving the ChatProgramm");
+                bufferedWriter.newLine();
+                bufferedWriter.flush();
+                auswahl = bufferedReader.readLine();
+                if(auswahl.equals("1")){
+                this.clientUsername = Login();
+                break;
+                } else if (auswahl.equals("2")) {
+                    this.clientUsername = register();
+                    break;
+                } else if (auswahl.equalsIgnoreCase("x")) {
+                    removeClient();
+                    break;
+                }
+            }
+        } catch (IOException e) {
+            removeClient();
         }
     }
 }
