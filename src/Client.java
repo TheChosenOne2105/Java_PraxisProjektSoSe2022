@@ -5,12 +5,9 @@ import java.util.Scanner;
 
 //Basierend auf dem Code von diesem Tutorial: https://www.youtube.com/watch?v=gLfuZrrfKes
 public class Client {
-
-
     private Socket socket;
     private BufferedReader bufferedReader;
     private BufferedWriter bufferedWriter;
-
 
     public Client(Socket socket){
         try {
@@ -18,7 +15,6 @@ public class Client {
             this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.bufferedWriter= new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
         } catch (IOException e) {
-
             closeEverything(socket, bufferedReader, bufferedWriter);
         }
     }
@@ -92,7 +88,6 @@ public class Client {
             Scanner sc = new Scanner(System.in);
 
             Client client = new Client(new Socket("localhost", 1833));
-
 
             client.listenForMessage();
             client.sendMessage(sc);
