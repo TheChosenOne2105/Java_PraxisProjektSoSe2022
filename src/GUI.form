@@ -28,7 +28,7 @@
           <component id="e9569" class="javax.swing.JTextArea" binding="textArea2" default-binding="true">
             <constraints/>
             <properties>
-              <background color="-5987695"/>
+              <background color="-1"/>
             </properties>
           </component>
         </children>
