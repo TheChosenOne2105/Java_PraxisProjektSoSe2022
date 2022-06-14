@@ -56,6 +56,10 @@ public class Client {
         frame.setVisible(true);
         frame.setTitle("SpeedChat");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        if(frame == null){
+            closeEverything(socket, bufferedReader, bufferedWriter);
+        }
+
     }
 
 

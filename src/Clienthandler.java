@@ -185,6 +185,10 @@ public class Clienthandler extends Thread {
         int auswahl = 0;
         try {
             for (Clienthandler clienthandler : serverliste) {
+                if( clienthandler.clientUsername == null){
+                    removeClient();
+                    break;
+                }
                 if (clienthandler.clientUsername.equals(clientUsername)) {
                     bufferedWriter.write("Please enter Number of the Chatroom(1-5) that you want to go in or x if you want to remain in your current chatroom: " );
                     bufferedWriter.newLine();
