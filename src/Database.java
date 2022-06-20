@@ -9,41 +9,48 @@ import java.time.*;
 public class Database {
 
 
-    public void DBstart() {
+    public void DbStart() {
         //Code basierend auf den Tutorials auf dieser Seite: https://www.sqlitetutorial.net/sqlite-java/sqlite-jdbc-driver/
-        Connection conn = null;
-        Statement stmt;
-        Statement stmt2;
+        Connection Conn = null;
+        Statement Stmt;
+        Statement Stmt2;
+        Statement Stmt3;
         try {
             // db parameters
-            String s = String.valueOf(Path.of("").toAbsolutePath());
-            String url = "jdbc:sqlite:" + s + "/src/DatabaseForChatApplication.db";
-            url = url.replaceAll("\\\\", "/");
+            String AbsolutePath = String.valueOf(Path.of("").toAbsolutePath());
+            String URL = "jdbc:sqlite:" + AbsolutePath + "/src/DatabaseForChatApplication.db";
+            URL = URL.replaceAll("\\\\", "/");
 
             // create a connection to the database
-            conn = DriverManager.getConnection(url);
+            Conn = DriverManager.getConnection(URL);
 
 
-            stmt = conn.createStatement();
-            String sql = "CREATE TABLE IF NOT EXISTS MESSAGES " +
+            Stmt = Conn.createStatement();
+            String SQL = "CREATE TABLE IF NOT EXISTS MESSAGES " +
                     "(TIME TEXT PRIMARY KEY     NOT NULL," +
                     " MESSAGE        TEXT    NOT NULL, " +
                     " ADDRESS        INT  NOT NULL)";
-            stmt.executeUpdate(sql);
-            stmt.close();
-            stmt2 = conn.createStatement();
-            String sql2 = "CREATE TABLE IF NOT EXISTS USERHANDLING " +
+            Stmt.executeUpdate(SQL);
+            Stmt.close();
+            Stmt2 = Conn.createStatement();
+            String SQL2 = "CREATE TABLE IF NOT EXISTS USERHANDLING " +
                     "(USERNAME TEXT PRIMARY KEY     NOT NULL," +
                     " PASSWORD        TEXT  NOT NULL)";
-            stmt2.executeUpdate(sql2);
-            stmt2.close();
-            conn.close();
+            Stmt2.executeUpdate(SQL2);
+            Stmt2.close();
+            Stmt3 = Conn.createStatement();
+            String SQL3 = "CREATE TABLE IF NOT EXISTS BANNLIST " +
+                    "(USERNAME TEXT PRIMARY KEY NOT NULL," +
+                    "REASON TEXT NOT NULL)";
+            Stmt3.executeUpdate(SQL3);
+            Stmt.close();
+            Conn.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         } finally {
             try {
-                if (conn != null) {
-                    conn.close();
+                if (Conn != null) {
+                    Conn.close();
                 }
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
@@ -52,8 +59,8 @@ public class Database {
     }
 
     public void insertIntoOldMessages(String Message, int ChatroomAdresse) {
-        Connection conn;
-        Statement stmt;
+        Connection Conn;
+        Statement Stmt;
         DateTimeFormatter DateTimeFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss:SS");
         String Messagekey = LocalDateTime.now().format(DateTimeFormat);
 
@@ -64,13 +71,13 @@ public class Database {
             url = url.replaceAll("\\\\", "/");
 
             // create a connection to the database
-            conn = DriverManager.getConnection(url);
-            stmt = conn.createStatement();
-            String sql = "INSERT INTO MESSAGES (TIME, MESSAGE, ADDRESS)" +
+            Conn = DriverManager.getConnection(url);
+            Stmt = Conn.createStatement();
+            String SQL = "INSERT INTO MESSAGES (TIME, MESSAGE, ADDRESS)" +
                     String.format(" VALUES (%s", "'" + Messagekey + "', '" + Message + "', " + ChatroomAdresse + ")");
-            stmt.executeUpdate(sql);
-            stmt.close();
-            conn.close();
+            Stmt.executeUpdate(SQL);
+            Stmt.close();
+            Conn.close();
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -78,107 +85,107 @@ public class Database {
     }
 
     public ArrayList<String> LoadingOldMessages(int Addresse) {
-        Connection conn;
-        Statement stmt;
-        ArrayList<String> loadingMessages = new ArrayList<>();
+        Connection Conn;
+        Statement Stmt;
+        ArrayList<String> OldMessages = new ArrayList<>();
 
 
         try {
-            String s = String.valueOf(Path.of("").toAbsolutePath());
-            String url = "jdbc:sqlite:" + s + "/src/DatabaseForChatApplication.db";
-            url = url.replaceAll("\\\\", "/");
+            String AbsolutePath = String.valueOf(Path.of("").toAbsolutePath());
+            String URL = "jdbc:sqlite:" + AbsolutePath + "/src/DatabaseForChatApplication.db";
+            URL = URL.replaceAll("\\\\", "/");
 
             // create a connection to the database
-            conn = DriverManager.getConnection(url);
-            stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(String.format("Select MESSAGE, TIME FROM MESSAGES WHERE ADDRESS = %o", Addresse) + " ORDER BY TIME DESC LIMIT 10;");
+            Conn = DriverManager.getConnection(URL);
+            Stmt = Conn.createStatement();
+            ResultSet RS = Stmt.executeQuery(String.format("Select MESSAGE, TIME FROM MESSAGES WHERE ADDRESS = %o", Addresse) + " ORDER BY TIME DESC LIMIT 10;");
 
-            while (rs.next()) {
-                String returnMessage = "["+ rs.getString("TIME")+ "] " + rs.getString("Message");
-                loadingMessages.add(returnMessage);
+            while (RS.next()) {
+                String ReturnMessage = "["+ RS.getString("TIME")+ "] " + RS.getString("Message");
+                OldMessages.add(ReturnMessage);
             }
-            stmt.close();
-            conn.close();
+            Stmt.close();
+            Conn.close();
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return loadingMessages;
+        return OldMessages;
     }
 
         public void insertIntoUserHandling(String Username, String Password) {
-            Connection conn;
-            Statement stmt;
+            Connection Conn;
+            Statement Stmt;
 
 
 
             try {
-                String s = String.valueOf(Path.of("").toAbsolutePath());
-                String url = "jdbc:sqlite:" + s + "/src/DatabaseForChatApplication.db";
-                url = url.replaceAll("\\\\", "/");
+                String AbsolutePath = String.valueOf(Path.of("").toAbsolutePath());
+                String URL = "jdbc:sqlite:" + AbsolutePath + "/src/DatabaseForChatApplication.db";
+                URL = URL.replaceAll("\\\\", "/");
 
                 // create a connection to the database
-                conn = DriverManager.getConnection(url);
-                stmt = conn.createStatement();
-                String sql = "INSERT INTO USERHANDLING (USERNAME, PASSWORD)" +
+                Conn = DriverManager.getConnection(URL);
+                Stmt = Conn.createStatement();
+                String SQL = "INSERT INTO USERHANDLING (USERNAME, PASSWORD)" +
                         String.format(" VALUES (%s", "'" + Username+ "', '" + Password+ "' " + ")");
-                stmt.executeUpdate(sql);
-                stmt.close();
-                conn.close();
+                Stmt.executeUpdate(SQL);
+                Stmt.close();
+                Conn.close();
 
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
         }
             public boolean UsernameCheck(String Username) {
-                boolean check;
-                Connection conn;
-                Statement stmt;
+                boolean Check;
+                Connection Conn;
+                Statement Stmt;
                 ArrayList<String> Usernames = new ArrayList<>();
                 try {
-                    String s = String.valueOf(Path.of("").toAbsolutePath());
-                    String url = "jdbc:sqlite:" + s + "/src/DatabaseForChatApplication.db";
-                    url = url.replaceAll("\\\\", "/");
+                    String AbsolutePath = String.valueOf(Path.of("").toAbsolutePath());
+                    String URL = "jdbc:sqlite:" + AbsolutePath + "/src/DatabaseForChatApplication.db";
+                    URL = URL.replaceAll("\\\\", "/");
 
                     // create a connection to the database
-                    conn = DriverManager.getConnection(url);
-                    stmt = conn.createStatement();
-                    ResultSet rs = stmt.executeQuery("Select USERNAME FROM USERHANDLING");
-                    while (rs.next()){
-                        String UsernameToAdd = rs.getString("Username");
+                    Conn = DriverManager.getConnection(URL);
+                    Stmt = Conn.createStatement();
+                    ResultSet RS = Stmt.executeQuery("Select USERNAME FROM USERHANDLING");
+                    while (RS.next()){
+                        String UsernameToAdd = RS.getString("Username");
                         Usernames.add(UsernameToAdd);
                     }
-                    check = !Usernames.contains(Username);
-                    stmt.close();
-                    conn.close();
-                return check;
+                    Check = !Usernames.contains(Username);
+                    Stmt.close();
+                    Conn.close();
+                return Check;
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
 
             }
     public boolean PasswordCheck(String Username, String Password) {
-        boolean check;
-        Connection conn;
-        Statement stmt;
-        ArrayList<String> PASSWORDS = new ArrayList<>();
+        boolean Check;
+        Connection Conn;
+        Statement Stmt;
+        ArrayList<String> Passwords = new ArrayList<>();
         try {
             String s = String.valueOf(Path.of("").toAbsolutePath());
             String url = "jdbc:sqlite:" + s + "/src/DatabaseForChatApplication.db";
             url = url.replaceAll("\\\\", "/");
 
             // create a connection to the database
-            conn = DriverManager.getConnection(url);
-            stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(String.format("Select PASSWORD FROM USERHANDLING where USERNAME = '%s", Username + "'"));
-            while (rs.next()){
-                String UsernameToAdd = rs.getString("PASSWORD");
-                PASSWORDS.add(UsernameToAdd);
+            Conn = DriverManager.getConnection(url);
+            Stmt = Conn.createStatement();
+            ResultSet RS = Stmt.executeQuery(String.format("Select PASSWORD FROM USERHANDLING where USERNAME = '%s", Username + "'"));
+            while (RS.next()){
+                String UsernameToAdd = RS.getString("PASSWORD");
+                Passwords.add(UsernameToAdd);
             }
-            check = PASSWORDS.contains(Password);
-            stmt.close();
-            conn.close();
-            return check;
+            Check = Passwords.contains(Password);
+            Stmt.close();
+            Conn.close();
+            return Check;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

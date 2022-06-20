@@ -4,13 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="178099ab-1da0-41c0-a358-3844ec8ce151" name="Changes" comment="Test">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="178099ab-1da0-41c0-a358-3844ec8ce151" name="Changes" comment="ADDED FUNCTIONS&#10;- GUI to Chat&#10;- Now a User can have multiple Instances of his account on the server but only on diffrent chatrooms&#10;&#10;REFACTORING&#10;- Refactored all variables and methods to one convention&#10;- Refactored some parts of the code, so its better read- and followable &#10;BUG FIXES&#10;- Fixed a Bug that broke the Programm when a User joined with the same Account on another instance&#10;- Fixed a Bug that the Server leaving message would appear two times&#10;- Some minor Bug fixes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ChatApplikation/Clienthandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ChatApplikation/Clienthandler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Clienthandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Clienthandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Database.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Database.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/DatabaseForChatApplication.db" beforeDir="false" afterPath="$PROJECT_DIR$/src/DatabaseForChatApplication.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ClientHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ClientHandler.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,7 +46,14 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$USER_HOME$/Downloads/PraxisProjekt" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\User\rep_SoSe22_Projekt\PraxisProjektSoSe2022\src" />
+      <recent name="C:\Users\User\rep_SoSe22_Projekt\PraxisProjektSoSe2022\src\default" />
+    </key>
   </component>
   <component name="RunManager" selected="Application.Client">
     <configuration name="Client" type="Application" factoryName="Application" singleton="false" temporary="true" nameIsGenerated="true">
@@ -74,6 +77,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="GUI" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="GUI" />
+      <module name="ChatApplikation" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Main" />
       <module name="ChatApplikation" />
@@ -81,41 +91,27 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Showclients" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="Showclients" />
-      <module name="ChatApplikation" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="Showclients" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="Showclients" />
-      <module name="ChatApplikation" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="db" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="db" />
+    <configuration name="Test" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Test" />
       <module name="ChatApplikation" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <list>
+      <item itemvalue="Application.Test" />
       <item itemvalue="Application.Database" />
-      <item itemvalue="Application.Showclients" />
       <item itemvalue="Application.Client" />
-      <item itemvalue="Application.db" />
       <item itemvalue="Application.Main" />
+      <item itemvalue="Application.GUI" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Application.Client" />
         <item itemvalue="Application.Main" />
+        <item itemvalue="Application.Test" />
+        <item itemvalue="Application.GUI" />
         <item itemvalue="Application.Database" />
-        <item itemvalue="Application.db" />
-        <item itemvalue="Application.Showclients" />
       </list>
     </recent_temporary>
   </component>
@@ -268,7 +264,28 @@
       <option name="project" value="LOCAL" />
       <updated>1654882382640</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="GUI Added">
+      <created>1655197189160</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1655197189160</updated>
+    </task>
+    <task id="LOCAL-00022" summary="GUI Added [BugFixes]">
+      <created>1655203627665</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1655203627665</updated>
+    </task>
+    <task id="LOCAL-00023" summary="ADDED FUNCTIONS&#10;- GUI to Chat&#10;- Now a User can have multiple Instances of his account on the server but only on diffrent chatrooms&#10;&#10;REFACTORING&#10;- Refactored all variables and methods to one convention&#10;- Refactored some parts of the code, so its better read- and followable &#10;BUG FIXES&#10;- Fixed a Bug that broke the Programm when a User joined with the same Account on another instance&#10;- Fixed a Bug that the Server leaving message would appear two times&#10;- Some minor Bug fixes">
+      <created>1655725755741</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1655725755741</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -291,7 +308,10 @@
     <MESSAGE value="Version 0.4 des Servers. [Bugfixing]" />
     <MESSAGE value="Chatrooms fertig! Version 1.3" />
     <MESSAGE value="Test" />
-    <option name="LAST_COMMIT_MESSAGE" value="Test" />
+    <MESSAGE value="GUI Added" />
+    <MESSAGE value="GUI Added [BugFixes]" />
+    <MESSAGE value="ADDED FUNCTIONS&#10;- GUI to Chat&#10;- Now a User can have multiple Instances of his account on the server but only on diffrent chatrooms&#10;&#10;REFACTORING&#10;- Refactored all variables and methods to one convention&#10;- Refactored some parts of the code, so its better read- and followable &#10;BUG FIXES&#10;- Fixed a Bug that broke the Programm when a User joined with the same Account on another instance&#10;- Fixed a Bug that the Server leaving message would appear two times&#10;- Some minor Bug fixes" />
+    <option name="LAST_COMMIT_MESSAGE" value="ADDED FUNCTIONS&#10;- GUI to Chat&#10;- Now a User can have multiple Instances of his account on the server but only on diffrent chatrooms&#10;&#10;REFACTORING&#10;- Refactored all variables and methods to one convention&#10;- Refactored some parts of the code, so its better read- and followable &#10;BUG FIXES&#10;- Fixed a Bug that broke the Programm when a User joined with the same Account on another instance&#10;- Fixed a Bug that the Server leaving message would appear two times&#10;- Some minor Bug fixes" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -308,6 +328,6 @@
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/PraxisProjektSoSe2022$Client.ic" NAME="Client Coverage Results" MODIFIED="1654714041930" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/PraxisProjektSoSe2022$Client.ic" NAME="Client Coverage Results" MODIFIED="1654863599047" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
 </project>
