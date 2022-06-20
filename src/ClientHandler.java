@@ -4,27 +4,29 @@ import java.net.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.UUID;
 
-public class Clienthandler extends Thread {
+public class ClientHandler extends Thread {
     //Basierend auf dem Code von diesem Tutorial: https://www.youtube.com/watch?v=cRfsUrU3RjE
     //Basierend auf dem Code von diesem Tutorial: https://www.youtube.com/watch?v=gLfuZrrfKes
     final Socket client;
-    public static ArrayList<Clienthandler> serverliste = new ArrayList<>();
-    public static ArrayList<Clienthandler> Chatroom1 = new ArrayList<>();
-    public static ArrayList<Clienthandler> Chatroom2 = new ArrayList<>();
-    public static ArrayList<Clienthandler> Chatroom3 = new ArrayList<>();
-    public static ArrayList<Clienthandler> Chatroom4 = new ArrayList<>();
-    public static ArrayList<Clienthandler> Chatroom5 = new ArrayList<>();
-    public static HashMap <Integer , ArrayList<Clienthandler>> Chatrooms = new HashMap<>();
+    public static ArrayList<ClientHandler> serverliste = new ArrayList<>();
+    public static ArrayList<ClientHandler> Chatroom1 = new ArrayList<>();
+    public static ArrayList<ClientHandler> Chatroom2 = new ArrayList<>();
+    public static ArrayList<ClientHandler> Chatroom3 = new ArrayList<>();
+    public static ArrayList<ClientHandler> Chatroom4 = new ArrayList<>();
+    public static ArrayList<ClientHandler> Chatroom5 = new ArrayList<>();
+    public static HashMap <Integer , ArrayList<ClientHandler>> Chatrooms = new HashMap<>();
 
 
     private String clientUsername;
+    private String UniqueID;
     Database database = new Database();
     private BufferedWriter bufferedWriter;
     private BufferedReader bufferedReader;
 
-    public Clienthandler(Socket clientsocket) throws IOException {
-        this.client = clientsocket;
+    public ClientHandler(Socket ClientSocket) {
+        this.client = ClientSocket;
 
 
     }
@@ -32,21 +34,22 @@ public class Clienthandler extends Thread {
     @Override
     public void run() {
         try {
-            database.DBstart();
+            database.DbStart();
             this.bufferedReader = new BufferedReader(new InputStreamReader(client.getInputStream()));
             this.bufferedWriter = new BufferedWriter(new PrintWriter(client.getOutputStream()));
             LoginOrRegister();
+            this.UniqueID = CreatingUniqueID();
             AssigningChatrooms();
-            broadcastServerMessage(clientUsername + " has entered the Chat!");
+            BroadcastServerMessage(clientUsername + " has entered the Chat!");
             serverliste.add(this);
             changeChatroom();
-            handler(client);
+            Handler(client);
         } catch (IOException e) {
-            removeClient();
+            RemoveClient();
         }
     }
 
-    public void handler(Socket clientSocket) {
+    public void Handler(Socket clientSocket) {
         String clientMessage;
 
         while (clientSocket.isConnected()) {
@@ -55,79 +58,86 @@ public class Clienthandler extends Thread {
                 sendingMessages(clientMessage);
                 if (clientMessage.equalsIgnoreCase("/quit")) {
                     bufferedWriter.write("You disconnected from the Server!");
-                    removeClient();
+                    RemoveClient();
                     break;
                 }
                 if (clientMessage.equalsIgnoreCase("/showmembers")) {
-                    showClients();
+                    ShowClients();
                 }
                 if (clientMessage.equalsIgnoreCase("/changeChatroom")) {
                     changeChatroom();
                 }
             } catch (IOException e) {
-                removeClient();
+                RemoveClient();
                 break;
             }
 
 
         }
-        removeClient();
+        BroadcastServerMessage(clientUsername + " has left the chat");
+        RemoveClient();
 
     }
 
 
     public void sendingMessages(String Message) {
         Database database = new Database();
-        String formatedMessage = clientUsername + ": " + Message;
-        ArrayList<Clienthandler> sendingroom = serverliste;
-        for (Clienthandler clienthandler : serverliste) {
-            if (clienthandler.clientUsername.equals(clientUsername)) {
+        String FormattedMessage = clientUsername + ": " + Message;
+        ArrayList<ClientHandler> SendingRoom = serverliste;
+        for (ClientHandler clienthandler : serverliste) {
+            if (clienthandler.UniqueID.equals(UniqueID)) {
                 for(int i=1; i<Chatrooms.size()+1; i++){
                     if (Chatrooms.get(i).contains(clienthandler)) {
-                    sendingroom = Chatrooms.get(i);
+                    SendingRoom = Chatrooms.get(i);
                     if(!Message.contains("/") && !Message.equals("")) {
-                        database.insertIntoOldMessages(formatedMessage, i);
+                        database.insertIntoOldMessages(FormattedMessage, i);
                     }
                 }
                 }
             }
         }
         try {
-            for (Clienthandler clienthandler : sendingroom) {
+            for (ClientHandler clienthandler : SendingRoom) {
                 if (Message.equalsIgnoreCase("")) {
 
-                } else if (!clienthandler.clientUsername.equals(clientUsername) && !Message.contains("/")) {
-                    clienthandler.bufferedWriter.write(formatedMessage);
+                } else if (!clienthandler.UniqueID.equals(UniqueID) && !Message.contains("/")) {
+                    clienthandler.bufferedWriter.write(FormattedMessage);
                     clienthandler.bufferedWriter.newLine();
                     clienthandler.bufferedWriter.flush();
 
 
                 } else if (Message.equalsIgnoreCase("/showmembers") || Message.equalsIgnoreCase("/quit") || Message.equalsIgnoreCase("/changeChatroom")) {
 
-                } else if (clienthandler.clientUsername.equals(clientUsername) && Message.contains("/")) {
+                } else if (clienthandler.UniqueID.equals(UniqueID) && Message.contains("/")) {
                     clienthandler.bufferedWriter.write("Dieser Befehl ist uns leider unbekannt! Bitte versuchen Sie es erneut.");
                     clienthandler.bufferedWriter.newLine();
                     clienthandler.bufferedWriter.flush();
                 }
             }
         } catch (IOException e) {
-            removeClient();
+            RemoveClient();
 
         }
 
     }
 
-    public void removeClient() {
+    public void RemoveClient() {
         try {
             serverliste.remove(this);
-            broadcastServerMessage(clientUsername + " has left the chat");
-            if (bufferedWriter != null) {
+            for (int i = 1; i < Chatrooms.size()+1; i++) {
+                if (Chatrooms.get(i).contains(this)){
+                    Chatrooms.get(i).remove(this);
+                    BroadcastServerMessage(clientUsername + " has left Chatroom " + i + "!");
+
+                }
+            }
+            if (this.bufferedWriter != null) {
                 this.bufferedWriter.close();
             }
-            if (bufferedReader != null) {
+            if (this.bufferedReader != null) {
                 this.bufferedReader.close();
             }
-            if (client != null) {
+            if (this.client != null) {
                 this.client.close();
             }
         } catch (IOException e) {
@@ -135,24 +145,29 @@ public class Clienthandler extends Thread {
         }
     }
 
-    public void showClients() {
+    public void ShowClients() {
         try {
-            for (Clienthandler clienthandler : serverliste) {
-                if (clienthandler.clientUsername.equals(clientUsername)) {
+            for (ClientHandler clienthandler : serverliste) {
+                if (clienthandler.UniqueID.equals(UniqueID)) {
                     bufferedWriter.write("Current Users on this Server: ");
                     bufferedWriter.newLine();
                     bufferedWriter.flush();
-                    for (Clienthandler clienthandler1 : serverliste) {
-                        bufferedWriter.write(clienthandler1.clientUsername);
-                        bufferedWriter.newLine();
-                        bufferedWriter.flush();
+                    bufferedWriter.write(clientUsername);
+                    bufferedWriter.newLine();
+                    bufferedWriter.flush();
+                    for (ClientHandler clientHandler1 : serverliste) {
+                        if(!clientHandler1.clientUsername.equals(clientUsername)) {
+                            bufferedWriter.write(clientHandler1.clientUsername);
+                            bufferedWriter.newLine();
+                            bufferedWriter.flush();
+                        }
                     }
                     for(int i=1; i < Chatrooms.size()+1; i++){
                         bufferedWriter.write("Current Users in Chatroom " + i);
                         bufferedWriter.newLine();
                         bufferedWriter.flush();
-                        for(Clienthandler clienthandler2 : Chatrooms.get(i)){
-                            bufferedWriter.write(clienthandler2.clientUsername);
+                        for(ClientHandler clientHandler2 : Chatrooms.get(i)){
+                            bufferedWriter.write(clientHandler2.clientUsername);
                             bufferedWriter.newLine();
                             bufferedWriter.flush();
                         }
@@ -161,19 +176,19 @@ public class Clienthandler extends Thread {
 
             }
         } catch (IOException e) {
-            removeClient();
+            RemoveClient();
         }
     }
 
-    public void broadcastServerMessage(String Message) {
-        String formatedMessage = "Server: " + Message;
-        for (Clienthandler clienthandler : serverliste) {
+    public void BroadcastServerMessage(String Message) {
+        String FormattedMessage = "Server: " + Message;
+        for (ClientHandler clienthandler : serverliste) {
             try {
-                clienthandler.bufferedWriter.write(formatedMessage);
+                clienthandler.bufferedWriter.write(FormattedMessage);
                 clienthandler.bufferedWriter.newLine();
                 clienthandler.bufferedWriter.flush();
             } catch (IOException e) {
-                removeClient();
+                RemoveClient();
                 break;
             }
         }
@@ -181,30 +196,30 @@ public class Clienthandler extends Thread {
 
     public void changeChatroom() {
         Database database = new Database();
-        boolean checker = true;
+        boolean Check = false;
         int auswahl = 0;
         try {
-            for (Clienthandler clienthandler : serverliste) {
+            for (ClientHandler clienthandler : serverliste) {
                 if( clienthandler.clientUsername == null){
-                    removeClient();
+                    RemoveClient();
                     break;
                 }
-                if (clienthandler.clientUsername.equals(clientUsername)) {
+                if (clienthandler.UniqueID.equals(UniqueID)) {
                     bufferedWriter.write("Please enter Number of the Chatroom(1-5) that you want to go in or x if you want to remain in your current chatroom: " );
                     bufferedWriter.newLine();
                     bufferedWriter.flush();
                     String insert = clienthandler.bufferedReader.readLine();
                     for (int i = 1; i < Chatrooms.size()+1; i++) {
                         if (insert.equals(Integer.toString(i))) {
-                            if (Chatrooms.get(i).contains(clienthandler)) {
-                                bufferedWriter.write("You are already in Chatroom "+ i + " !");
+                            if (Chatrooms.get(i).contains(clienthandler) ||CheckIfUsernameIsAlreadyInChatroom(i, clientUsername)) {
+                                bufferedWriter.write("You or another instance of your Account are already in Chatroom "+ i + " !");
                                 bufferedWriter.newLine();
                                 bufferedWriter.flush();
-                                checker = false;
+                                Check = true;
                                 break;
                             } else {
                                 Chatrooms.get(i).add(clienthandler);
-                                broadcastServerMessage(clienthandler.clientUsername + " joined Chatroom " + i);
+                                BroadcastServerMessage(clienthandler.clientUsername + " joined Chatroom " + i);
                                 ArrayList<String> LoadedMessages = database.LoadingOldMessages(i);
 
                                 Collections.reverse(LoadedMessages);
@@ -221,7 +236,7 @@ public class Clienthandler extends Thread {
                                 bufferedWriter.newLine();
                                 bufferedWriter.flush();
                                 auswahl = i;
-                                checker = false;
+                                Check = true;
                             }
                         } }
                         if (insert.equalsIgnoreCase("x")) {
@@ -229,7 +244,7 @@ public class Clienthandler extends Thread {
                             bufferedWriter.newLine();
                             bufferedWriter.flush();
                             break;
-                        } else if (checker && !insert.equalsIgnoreCase("x") ) {
+                        } else if (!Check && !insert.equalsIgnoreCase("x") ) {
                             bufferedWriter.write("Error! A Chatroom like that don't exist on this Server. We only have: Chatroom 1, Chatroom 2, Chatroom 3, Chatroom 4, Chatroom 5");
                             bufferedWriter.newLine();
                             bufferedWriter.flush();
@@ -239,7 +254,7 @@ public class Clienthandler extends Thread {
                     if(auswahl > 0){
                         for (int i = 1; i < Chatrooms.size()+1; i++){
                             if(i != auswahl && Chatrooms.get(i).contains(clienthandler)){
-                                broadcastServerMessage(clienthandler.clientUsername + " has left Chatroom " + i);
+                                BroadcastServerMessage(clienthandler.clientUsername + " has left Chatroom " + i);
                                 Chatrooms.get(i).remove(clienthandler);
                             }
                         }
@@ -247,7 +262,7 @@ public class Clienthandler extends Thread {
                 }
             }
         } catch (IOException e) {
-            removeClient();
+            RemoveClient();
         }
 
     }
@@ -306,7 +321,7 @@ public class Clienthandler extends Thread {
 
             return Username;
         } catch (IOException e) {
-            removeClient();
+            RemoveClient();
             return null;
         }
 
@@ -346,7 +361,7 @@ public class Clienthandler extends Thread {
             }
             return Username;
         } catch (IOException e) {
-            removeClient();
+            RemoveClient();
             return null;
         }
     }
@@ -368,13 +383,27 @@ public class Clienthandler extends Thread {
                     this.clientUsername = register();
                     break;
                 } else if (auswahl.equalsIgnoreCase("x")) {
-                    removeClient();
+                    RemoveClient();
                     break;
                 }
             }
         } catch (IOException e) {
-            removeClient();
+            RemoveClient();
         }
+    }
+    private String CreatingUniqueID(){
+        String UniqueID = UUID.randomUUID().toString();
+        return UniqueID;
+    }
+    private boolean CheckIfUsernameIsAlreadyInChatroom(Integer NumberOfTheChatroom, String UnserNameToCheck) throws IOException {
+        boolean Check = false;
+        for (ClientHandler clientHandler:Chatrooms.get(NumberOfTheChatroom)){
+            if (clientHandler.clientUsername.equals(UnserNameToCheck)){
+                Check = true;
+                break;
+            }
+        }
+        return Check;
     }
 }
 

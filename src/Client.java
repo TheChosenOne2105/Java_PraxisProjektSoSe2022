@@ -38,7 +38,7 @@ public class Client {
                             bufferedWriter.flush();
                             typeMessage.setText("");
                         } catch (IOException ex) {
-                            closeEverything(socket, bufferedReader, bufferedWriter);
+                            CloseClient(socket, bufferedReader, bufferedWriter);
                         }
                     }
 
@@ -46,10 +46,10 @@ public class Client {
                 }
             });
         } catch (IOException e) {
-            closeEverything(socket, bufferedReader, bufferedWriter);
+            CloseClient(socket, bufferedReader, bufferedWriter);
         }
     }
-    public void frame() {
+    public void Frame() {
         frame.setSize(500, 500);
         frame.setContentPane(Panel);
         frame.setIconImage(image.getImage());
@@ -57,13 +57,13 @@ public class Client {
         frame.setTitle("SpeedChat");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         if(frame == null){
-            closeEverything(socket, bufferedReader, bufferedWriter);
+            CloseClient(socket, bufferedReader, bufferedWriter);
         }
 
     }
 
 
-    public void listenForMessage() {
+    public void ListenForMessages() {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -76,16 +76,16 @@ public class Client {
                         }
                     catch (IOException e) {
 
-                        closeEverything(socket, bufferedReader, bufferedWriter);
+                        CloseClient(socket, bufferedReader, bufferedWriter);
                     }
                 }
-                closeEverything(socket, bufferedReader, bufferedWriter);
+                CloseClient(socket, bufferedReader, bufferedWriter);
             }
         }).start();
     }
 
 
-    public void closeEverything(Socket socket, BufferedReader bufferedReader, BufferedWriter bufferedWriter) {
+    public void CloseClient(Socket socket, BufferedReader bufferedReader, BufferedWriter bufferedWriter) {
 
         try {
             if (bufferedReader != null) {
@@ -107,8 +107,8 @@ public class Client {
         try {
 
             Client client = new Client(new Socket("localhost", 1833));
-            client.frame();
-            client.listenForMessage();
+            client.Frame();
+            client.ListenForMessages();
         } catch (UnknownHostException e) {
             System.out.println("Server is unreachable");
         } catch (IOException e) {
