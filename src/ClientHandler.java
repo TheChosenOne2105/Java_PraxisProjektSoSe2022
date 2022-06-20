@@ -40,7 +40,9 @@ public class ClientHandler extends Thread {
             LoginOrRegister();
             this.UniqueID = CreatingUniqueID();
             AssigningChatrooms();
-            BroadcastServerMessage(clientUsername + " has entered the Chat!");
+            if (CheckIfUserInstanceIsAlreadyOnServer(clientUsername)){
+                BroadcastServerMessage(clientUsername + " has entered the Chat!");
+            }
             serverliste.add(this);
             changeChatroom();
             Handler(client);
@@ -128,7 +130,7 @@ public class ClientHandler extends Thread {
                 if (Chatrooms.get(i).contains(this)){
                     Chatrooms.get(i).remove(this);
                     BroadcastServerMessage(clientUsername + " has left Chatroom " + i + "!");
-
+                    break;
                 }
             }
             if (this.bufferedWriter != null) {
@@ -256,6 +258,7 @@ public class ClientHandler extends Thread {
                             if(i != auswahl && Chatrooms.get(i).contains(clienthandler)){
                                 BroadcastServerMessage(clienthandler.clientUsername + " has left Chatroom " + i);
                                 Chatrooms.get(i).remove(clienthandler);
+                                break;
                             }
                         }
                     }
@@ -267,7 +270,7 @@ public class ClientHandler extends Thread {
 
     }
     public void AssigningChatrooms() throws IOException {
-        if(!(Chatrooms.containsValue(Chatroom1) || Chatrooms.containsValue(Chatroom2) || Chatrooms.containsValue(Chatroom3) || Chatrooms.containsValue(Chatroom4) || Chatrooms.containsValue(Chatroom5))){
+        if(!(Chatrooms.containsValue(Chatroom1) || Chatrooms.containsValue(Chatroom2) || Chatrooms.containsValue(Chatroom3) || Chatrooms.containsValue(Chatroom4) || Chatrooms.containsValue(Chatroom5) || Chatrooms.containsValue(serverliste))){
             Chatrooms.put(1, Chatroom1);
             Chatrooms.put(2, Chatroom2);
             Chatrooms.put(3, Chatroom3);
@@ -395,11 +398,21 @@ public class ClientHandler extends Thread {
         String UniqueID = UUID.randomUUID().toString();
         return UniqueID;
     }
-    private boolean CheckIfUsernameIsAlreadyInChatroom(Integer NumberOfTheChatroom, String UnserNameToCheck) throws IOException {
+    private boolean CheckIfUsernameIsAlreadyInChatroom(Integer NumberOfTheChatroom, String UserNameToCheck){
         boolean Check = false;
         for (ClientHandler clientHandler:Chatrooms.get(NumberOfTheChatroom)){
-            if (clientHandler.clientUsername.equals(UnserNameToCheck)){
+            if (clientHandler.clientUsername.equals(UserNameToCheck)){
                 Check = true;
+                break;
+            }
+        }
+        return Check;
+    }
+    private boolean CheckIfUserInstanceIsAlreadyOnServer(String UserNameToCheck){
+        boolean Check = true;
+        for(ClientHandler clientHandler : serverliste){
+            if (clientHandler.clientUsername.equals(UserNameToCheck)){
+                Check = false;
                 break;
             }
         }
