@@ -29,6 +29,7 @@
             <constraints/>
             <properties>
               <background color="-1"/>
+              <font size="28"/>
             </properties>
           </component>
         </children>

@@ -1,6 +1,8 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -25,6 +27,34 @@ public class Client {
             this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.bufferedWriter= new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             textArea2.setEditable(false);
+            typeMessage.addKeyListener(new KeyListener() {
+                @Override
+                public void keyTyped(KeyEvent e) {
+
+                }
+                @Override
+                public void keyPressed(KeyEvent e) {
+
+                    if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                        textArea2.append(typeMessage.getText());
+                        String messageToSend = typeMessage.getText();
+                        try {
+                            textArea2.append("\n");
+                            bufferedWriter.write(messageToSend);
+                            bufferedWriter.newLine();
+                            bufferedWriter.flush();
+                            typeMessage.setText("");
+                        } catch (IOException ex) {
+                            CloseClient(socket, bufferedReader, bufferedWriter);
+                        }
+                    }
+                }
+
+                @Override
+                public void keyReleased(KeyEvent e) {
+
+                }
+            });
             Send.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
