@@ -9,13 +9,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="178099ab-1da0-41c0-a358-3844ec8ce151" name="Changes" comment="Update 20.6.2022 14:28 &#10;BUG FIXES&#10;- Fixed a Bug that would throw Exceptions">
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/ChatApplikation_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/ChatApplikation_jar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/ChatApplikation_jar2.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/ChatApplikation_jar3.xml" beforeDir="false" />
+    <list default="true" id="178099ab-1da0-41c0-a358-3844ec8ce151" name="Changes" comment="Update 23.6.2022 14:18 &#10;New Features: &#10;- You can enter Message with the &quot;Enter&quot; Button">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/ChatApplikation/Clienthandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ChatApplikation/Clienthandler.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Client.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ClientHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ClientHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Database.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Database.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/DatabaseForChatApplication.db" beforeDir="false" afterPath="$PROJECT_DIR$/src/DatabaseForChatApplication.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/GUI.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/GUI.form" afterDir="false" />
     </list>
@@ -45,6 +44,9 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
   <component name="ProjectId" id="29eeIRmPfj4ARip0oP63UuEu4XO" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
@@ -63,7 +65,7 @@
   }
 }</component>
   <component name="RunManager" selected="Application.Client">
-    <configuration name="Client" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+    <configuration name="Client" type="Application" factoryName="Application" singleton="false" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Client" />
       <module name="ChatApplikation" />
       <method v="2">
@@ -183,7 +185,14 @@
       <option name="project" value="LOCAL" />
       <updated>1654508805005</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Update 23.6.2022 14:18 &#10;New Features: &#10;- You can enter Message with the &quot;Enter&quot; Button">
+      <created>1655986720108</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1655986720108</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -204,7 +213,8 @@
     <MESSAGE value="Verbesserung Serversocket" />
     <MESSAGE value="Version 0.3 des Servers" />
     <MESSAGE value="Version 0.4 des Servers. [Bugfixing]" />
-    <option name="LAST_COMMIT_MESSAGE" value="Version 0.4 des Servers. [Bugfixing]" />
+    <MESSAGE value="Update 23.6.2022 14:18 &#10;New Features: &#10;- You can enter Message with the &quot;Enter&quot; Button" />
+    <option name="LAST_COMMIT_MESSAGE" value="Update 23.6.2022 14:18 &#10;New Features: &#10;- You can enter Message with the &quot;Enter&quot; Button" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

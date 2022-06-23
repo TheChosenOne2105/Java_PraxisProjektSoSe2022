@@ -63,8 +63,6 @@ public class Database {
         Statement Stmt;
         DateTimeFormatter DateTimeFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss:SS");
         String Messagekey = LocalDateTime.now().format(DateTimeFormat);
-
-
         try {
             String s = String.valueOf(Path.of("").toAbsolutePath());
             String url = "jdbc:sqlite:" + s + "/src/DatabaseForChatApplication.db";

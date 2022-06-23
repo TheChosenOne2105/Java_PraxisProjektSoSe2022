@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.text.DefaultCaret;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -34,7 +35,6 @@ public class Client {
                 }
                 @Override
                 public void keyPressed(KeyEvent e) {
-
                     if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                         textArea2.append(typeMessage.getText());
                         String messageToSend = typeMessage.getText();
@@ -80,7 +80,9 @@ public class Client {
         }
     }
     public void Frame() {
-        frame.setSize(500, 500);
+        DefaultCaret caret = (DefaultCaret)textArea2.getCaret();
+        caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+        frame.setSize(1000, 1000);
         frame.setContentPane(Panel);
         frame.setIconImage(image.getImage());
         frame.setVisible(true);
@@ -101,9 +103,11 @@ public class Client {
 
                 while (socket.isConnected()) {
                     try {
-                        textArea2.append(bufferedReader.readLine());
+                        String MessageReceived = bufferedReader.readLine();
+                        textArea2.append(MessageReceived);
                         textArea2.append("\n");
                         }
+
                     catch (IOException e) {
 
                         CloseClient(socket, bufferedReader, bufferedWriter);

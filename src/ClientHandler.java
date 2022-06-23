@@ -1,6 +1,8 @@
 
 import java.io.*;
 import java.net.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -58,17 +60,31 @@ public class ClientHandler extends Thread {
             try {
                 clientMessage = bufferedReader.readLine();
                 sendingMessages(clientMessage);
-                if (clientMessage.equalsIgnoreCase("/quit")) {
-                    bufferedWriter.write("You disconnected from the Server!");
-                    RemoveClient();
-                    break;
+
+                switch (clientMessage.toLowerCase()) {
+                    case "/showmembers" -> ShowClients();
+                    case "/changechatroom" -> changeChatroom();
+                    case "/emojis" -> {
+                        bufferedWriter.write("Server: You can send Emojis if you press the Windows-Key and the dot-key at the same time 😊");
+                        bufferedWriter.newLine();
+                        bufferedWriter.flush();
+                    }
+                    case "/help" -> {
+                        bufferedWriter.write("Server :/changeChatroom to change the Chatroom, you are current in!  You can send Emojis if you press the Windows-Key and the dot-key at the same time \uD83D\uDE0A\" ");
+                        bufferedWriter.newLine();
+                        bufferedWriter.flush();
+                        bufferedWriter.write("Server: /showmembers to display all users on the Server and in which Chatroom they are!");
+                        bufferedWriter.newLine();
+                        bufferedWriter.flush();
+                        bufferedWriter.write("Server: You can send Emojis if you press the Windows-Key and the dot-key at the same time 😊 ");
+                        bufferedWriter.newLine();
+                        bufferedWriter.flush();
+                    }
+                    default -> {
+                    }
                 }
-                if (clientMessage.equalsIgnoreCase("/showmembers")) {
-                    ShowClients();
-                }
-                if (clientMessage.equalsIgnoreCase("/changeChatroom")) {
-                    changeChatroom();
-                }
+
+
             } catch (IOException e) {
                 RemoveClient();
                 break;
@@ -83,8 +99,11 @@ public class ClientHandler extends Thread {
 
 
     public void sendingMessages(String Message) {
+        DateTimeFormatter DateTimeFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+        String time = LocalDateTime.now().format(DateTimeFormat);
         Database database = new Database();
         String FormattedMessage = clientUsername + ": " + Message;
+        String FinalizedFormattedMessage = "[" + time+ "]"+ clientUsername + ": " + Message;
         ArrayList<ClientHandler> SendingRoom = serverliste;
         for (ClientHandler clienthandler : serverliste) {
             if (clienthandler.UniqueID.equals(UniqueID)) {
@@ -101,15 +120,11 @@ public class ClientHandler extends Thread {
         try {
             for (ClientHandler clienthandler : SendingRoom) {
                 if (Message.equalsIgnoreCase("")) {
-
                 } else if (!clienthandler.UniqueID.equals(UniqueID) && !Message.contains("/")) {
-                    clienthandler.bufferedWriter.write(FormattedMessage);
+                    clienthandler.bufferedWriter.write(FinalizedFormattedMessage);
                     clienthandler.bufferedWriter.newLine();
                     clienthandler.bufferedWriter.flush();
-
-
-                } else if (Message.equalsIgnoreCase("/showmembers") || Message.equalsIgnoreCase("/quit") || Message.equalsIgnoreCase("/changeChatroom")) {
-
+                } else if (Message.equalsIgnoreCase("/showmembers") || Message.equalsIgnoreCase("/quit") || Message.equalsIgnoreCase("/changeChatroom") || Message.equalsIgnoreCase("/emojis") || Message.equalsIgnoreCase("/help")) {
                 } else if (clienthandler.UniqueID.equals(UniqueID) && Message.contains("/")) {
                     clienthandler.bufferedWriter.write("Dieser Befehl ist uns leider unbekannt! Bitte versuchen Sie es erneut.");
                     clienthandler.bufferedWriter.newLine();
@@ -375,7 +390,7 @@ public class ClientHandler extends Thread {
             bufferedWriter.newLine();
             bufferedWriter.flush();
             while (true) {
-                bufferedWriter.write("Please choose if you want to login or register! For Login 1 and for Register 2, x for leaving the ChatProgramm");
+                bufferedWriter.write("Please choose if you want to login or register! For Login 1 and for Register 2");
                 bufferedWriter.newLine();
                 bufferedWriter.flush();
                 auswahl = bufferedReader.readLine();
@@ -395,8 +410,7 @@ public class ClientHandler extends Thread {
         }
     }
     private String CreatingUniqueID(){
-        String UniqueID = UUID.randomUUID().toString();
-        return UniqueID;
+        return UUID.randomUUID().toString();
     }
     private boolean CheckIfUsernameIsAlreadyInChatroom(Integer NumberOfTheChatroom, String UserNameToCheck){
         boolean Check = false;
